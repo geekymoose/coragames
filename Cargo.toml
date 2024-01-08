@@ -1,8 +1,10 @@
 [package]
 name = "cora"
 version = "0.1.0"
-authors = ["geekymoose <constantin.masson@umontreal.ca>"]
-edition = "2018"
+authors = ["geekymoose <geekymoose@protonmail.com>"]
+edition = "2021"
+description = "A cloud / turn based game where players have to code the AI of their character"
+keywords = ["gamedev", "game", "tilemap"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
