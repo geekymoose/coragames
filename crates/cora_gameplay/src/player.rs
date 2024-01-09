@@ -1,7 +1,6 @@
 use crate::action::Action;
 
-pub struct Player {
-}
+pub struct Player {}
 
 enum PlayerRequestStatus {
     Sending,

@@ -1,4 +1,4 @@
-use crate::{terrain::Grid, player::Player};
+use crate::{player::Player, terrain::Grid};
 
 struct Game {
     current_turn: usize,
