@@ -1,4 +1,3 @@
-pub struct Unit {
-    id: u32,
-    health: u32,
+pub(crate) struct Unit {
+    pub(crate) health: u32,
 }
