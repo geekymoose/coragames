@@ -1,4 +1,5 @@
 use crate::action::Action;
+use crate::terrain::Config;
 use crate::{player::Player, terrain::Grid};
 use std::collections::HashMap;
 
@@ -12,6 +13,14 @@ pub struct Game<'a> {
 }
 
 impl<'a> Game<'a> {
+    pub fn new(config: &Config) -> Self {
+        Self {
+            current_turn: 0,
+            gamegrid: Grid::new(config),
+            players: HashMap::new(),
+        }
+    }
+
     pub fn register_player_action_turn(player: &mut Player, player_action: Action) {
         player.action = Some(player_action);
     }

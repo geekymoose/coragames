@@ -18,3 +18,15 @@ pub(crate) struct Player<'a> {
     // Player stats for the current game.
     pub stats: PlayerStat,
 }
+
+impl<'a> Player<'a> {
+    pub(crate) fn new(id: u32, name: String, unit: &'a Unit, current_turn: u32) -> Self {
+        Self {
+            id,
+            name,
+            unit,
+            action: None,
+            stats: PlayerStat::new(id, current_turn),
+        }
+    }
+}

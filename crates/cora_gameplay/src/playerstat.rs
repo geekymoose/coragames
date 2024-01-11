@@ -8,10 +8,6 @@ pub(crate) struct PlayerStat {
     /// This is sually 0 if joined at start.
     pub turn_joined: u32,
 
-    /// Turn when the player left the game (if so).
-    /// If the player is still ingame, the value is None
-    pub turn_quitted: Option<u32>,
-
     /// Number of turns this player has been in-game.
     /// Regardless of the actual action done.
     pub turns_spent_ingame: u32,
@@ -28,7 +24,6 @@ impl PlayerStat {
         Self {
             player_id,
             turn_joined,
-            turn_quitted: None,
             turns_spent_ingame: 0,
             turn_action_applied: 0,
             turn_action_missed: 0,

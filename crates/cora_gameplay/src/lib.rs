@@ -1,6 +1,6 @@
 mod action;
-mod game;
+pub mod game;
 mod player;
 mod playerstat;
-mod terrain;
+pub mod terrain;
 mod unit;
