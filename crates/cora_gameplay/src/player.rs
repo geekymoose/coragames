@@ -1,14 +1,20 @@
 use crate::action::Action;
+use crate::playerstat::PlayerStat;
+use crate::unit::Unit;
 
-pub struct Player {}
+pub(crate) struct Player<'a> {
+    // The unique player ID to uniquely designate this player.
+    pub id: u32,
 
-enum PlayerRequestStatus {
-    Sending,
-    Pending,
-    Responded,
-}
+    // The player name
+    pub name: String,
 
-struct PlayerActionRequest {
-    status: PlayerRequestStatus,
-    action: Option<Action>,
+    // The unit currently controlled by the player.
+    pub unit: &'a Unit,
+
+    // The action choosen by the player (to apply on the current turn).
+    pub action: Option<Action>,
+
+    // Player stats for the current game.
+    pub stats: PlayerStat,
 }

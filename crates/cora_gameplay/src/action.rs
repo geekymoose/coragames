@@ -1,10 +1,10 @@
-pub enum Action {
+pub(crate) enum Action {
     Move(Direction),
     Attack(Direction),
     Interact(Direction),
 }
 
-pub enum Direction {
+pub(crate) enum Direction {
     Up,
     Down,
     Left,
