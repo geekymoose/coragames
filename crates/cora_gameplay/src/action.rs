@@ -1,4 +1,4 @@
-use crate::{terrain::Grid, unit::Unit};
+use crate::unit::Unit;
 
 pub(crate) enum Action {
     Move(Direction),
@@ -13,7 +13,7 @@ pub(crate) enum Direction {
     Right,
 }
 
-pub(crate) fn apply_action(action: Action, location: &mut Grid, unit: &mut Unit) {
+pub(crate) fn apply_action(action: Action, unit: &mut Unit) {
     match action {
         Action::Move(direction) => unit.movement(direction),
         Action::Attack(direction) => unit.attack(direction),

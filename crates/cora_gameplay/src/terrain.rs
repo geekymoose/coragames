@@ -1,5 +1,3 @@
-use crate::unit::Unit;
-
 pub struct Config {
     pub width: usize,
     pub height: usize,
@@ -10,7 +8,6 @@ pub(crate) struct Grid {
 }
 
 pub(crate) struct Cell {
-    unit: Option<Unit>,
     terrain: EnvironmentType,
 }
 
@@ -22,7 +19,6 @@ pub(crate) enum EnvironmentType {
 impl Default for Cell {
     fn default() -> Self {
         Self {
-            unit: None,
             terrain: EnvironmentType::Movable,
         }
     }
