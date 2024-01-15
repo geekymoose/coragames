@@ -1,4 +1,4 @@
-use crate::action::Action;
+use crate::action::{self, Action};
 use crate::terrain::Grid;
 use crate::unit::Unit;
 
@@ -21,7 +21,7 @@ pub(crate) struct Player<'a> {
     turn_action: PlayerTurnStatus,
 }
 
-enum PlayerTurnStatus {
+pub(crate) enum PlayerTurnStatus {
     /// The player is not doing anything.
     /// Usually, this is at the beginning of the turn.
     Idle,
@@ -78,12 +78,7 @@ impl<'a> Player<'a> {
                 // The player did not responded yet. Too bad.
             }
             PlayerTurnStatus::Responded(response) => {
-                match &response.action {
-                    // TODO WIP
-                    Action::Move(Direction) => todo!(),
-                    Action::Attack(Direction) => todo!(),
-                    Action::Interact(Direction) => todo!(),
-                }
+                // TODO action::apply_action(response.action, location, unit);
             }
         }
     }
