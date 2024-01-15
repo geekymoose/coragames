@@ -4,14 +4,14 @@ use crate::terrain::Config;
 use crate::terrain::Grid;
 use std::collections::HashMap;
 
-pub struct Game<'a> {
+pub struct Game<'a, 'b> {
     current_turn: usize,
-    gamegrid: Grid,
-    players: HashMap<u32, Player<'a>>,
+    gamegrid: Grid<'b>,
+    players: HashMap<u32, Player<'a, 'b>>,
 }
 
-impl<'a> Game<'a> {
-    pub fn new(config: &Config) -> Self {
+impl<'a, 'b> Game<'a, 'b> {
+    pub fn new(config: Config) -> Self {
         Self {
             current_turn: 0,
             gamegrid: Grid::new(config),

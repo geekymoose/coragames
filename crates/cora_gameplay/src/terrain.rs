@@ -3,12 +3,23 @@ pub struct Config {
     pub height: usize,
 }
 
-pub(crate) struct Grid {
-    cells: Vec<Vec<Cell>>,
+pub(crate) struct Grid<'a> {
+    config: Config,
+    cells: Vec<Vec<Cell<'a>>>,
 }
 
-pub(crate) struct Cell {
-    terrain: EnvironmentType,
+pub(crate) struct Cell<'a> {
+    x: usize,
+    y: usize,
+    grid: &'a Grid<'a>,
+    terrain_type: EnvironmentType,
+}
+
+pub(crate) enum Direction {
+    Up,
+    Down,
+    Left,
+    Right,
 }
 
 pub(crate) enum EnvironmentType {
@@ -16,16 +27,23 @@ pub(crate) enum EnvironmentType {
     Impassable,
 }
 
-impl Default for Cell {
-    fn default() -> Self {
-        Self {
-            terrain: EnvironmentType::Movable,
-        }
+impl<'a> Grid<'a> {
+    pub(crate) fn new(config: Config) -> Self {
+        todo!("Not Implemented");
     }
 }
 
-impl Grid {
-    pub(crate) fn new(config: &Config) -> Self {
+impl<'a> Cell<'a> {
+    pub(crate) fn new(x: usize, y: usize, grid: &'a Grid, terrain_type: EnvironmentType) -> Self {
+        Self {
+            x,
+            y,
+            grid,
+            terrain_type,
+        }
+    }
+
+    pub(crate) fn neighbor_at_direction(&self, direction: &Direction) -> Option<Cell<'a>> {
         todo!("Not Implemented");
     }
 }
