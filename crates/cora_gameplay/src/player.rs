@@ -1,5 +1,4 @@
 use crate::action::Action;
-use crate::playerstat::PlayerStat;
 use crate::terrain::Grid;
 use crate::unit::Unit;
 
@@ -20,9 +19,6 @@ pub(crate) struct Player<'a> {
     /// This is the current request ongoing and it's possible response when computed.
     /// If None, it means the player is currently not computing anything (e.g., start of the turn).
     turn_action: PlayerTurnStatus,
-
-    /// Player stats for the current game.
-    stats: PlayerStat,
 }
 
 enum PlayerTurnStatus {
@@ -52,13 +48,12 @@ struct PlayerTurnResponse {
 
 impl<'a> Player<'a> {
     /// Creates a new player for the provided unit.
-    pub(crate) fn new(id: u32, name: String, unit: &'a Unit, current_turn: u32) -> Self {
+    pub(crate) fn new(id: u32, name: String, unit: &'a Unit) -> Self {
         Self {
             id,
             name,
             unit,
             turn_action: PlayerTurnStatus::Idle,
-            stats: PlayerStat::new(id, current_turn),
         }
     }
 
