@@ -1,6 +1,10 @@
-use crate::action::Direction;
+use crate::{action::Direction, terrain::Cell};
 
-pub(crate) struct Unit {
+/// Represents one unit currently ingame.
+/// A unit is a something that can interact in the grid, move, attack.
+/// It is meant to be controlled by a player or an AI.
+pub(crate) struct Unit<'a> {
+    position: &'a Cell,
     health: u32,
     strength: u32,
 }
@@ -11,7 +15,7 @@ struct DamageStat {
     killshot: bool,
 }
 
-impl Unit {
+impl<'a> Unit<'a> {
     pub(crate) fn movement(&self, direction: Direction) {
         todo!("Not Implemented");
     }

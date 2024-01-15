@@ -13,7 +13,7 @@ pub(crate) struct Player<'a> {
 
     /// The unit currently controlled by the player.
     /// One unit should be controlled by exactly one player.
-    unit: &'a Unit,
+    unit: &'a Unit<'a>,
 
     /// Each turn, the player has to compute an action.
     /// This is the current request ongoing and it's possible response when computed.
@@ -74,11 +74,11 @@ impl<'a> Player<'a> {
             PlayerTurnStatus::Idle => {
                 // Nothing to do (this method may have been called to early)
             }
-            PlayerTurnStatus::Computing(request) => {
+            PlayerTurnStatus::Computing(_) => {
                 // The player did not responded yet. Too bad.
             }
             PlayerTurnStatus::Responded(response) => {
-                // TODO action::apply_action(response.action, location, unit);
+                //action::apply_action(response.action, &mut self.unit);
             }
         }
     }
