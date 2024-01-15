@@ -11,7 +11,7 @@ fn main() {
         height: 100,
     };
 
-    let mut game: Game = Game::new(&config);
+    let mut game: Game = Game::new(config);
 
     // game.spawn_player("player1");
     // game.spawn_player("player2");

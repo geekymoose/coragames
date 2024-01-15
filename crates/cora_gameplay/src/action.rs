@@ -1,16 +1,9 @@
-use crate::unit::Unit;
+use crate::{terrain::Direction, unit::Unit};
 
 pub(crate) enum Action {
     Move(Direction),
     Attack(Direction),
     Interact(Direction),
-}
-
-pub(crate) enum Direction {
-    Up,
-    Down,
-    Left,
-    Right,
 }
 
 pub(crate) fn apply_action(action: Action, unit: &mut Unit) {
