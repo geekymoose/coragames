@@ -1,19 +1,23 @@
+#[derive(Debug)]
 pub struct Config {
     pub width: usize,
     pub height: usize,
 }
 
+#[derive(Debug)]
 pub(crate) struct Grid {
     config: Config,
     cells: Vec<Vec<Cell>>,
 }
 
+#[derive(Debug)]
 pub(crate) struct Cell {
     x: usize,
     y: usize,
     terrain_type: EnvironmentType,
 }
 
+#[derive(Debug)]
 pub(crate) enum Direction {
     Up,
     Down,
@@ -21,6 +25,7 @@ pub(crate) enum Direction {
     Right,
 }
 
+#[derive(Debug)]
 pub(crate) enum EnvironmentType {
     Movable,
     Impassable,

@@ -1,5 +1,6 @@
 use crate::{terrain::Direction, unit::Unit};
 
+#[derive(Debug)]
 pub(crate) enum Action {
     Move(Direction),
     Attack(Direction),

@@ -4,6 +4,7 @@ use crate::unit::Unit;
 
 /// A Player is an entity which controls one unit and decides its actions at each turn.
 /// You can view it as the physical player in a boardgame for instance.
+#[derive(Debug)]
 pub(crate) struct Player<'a> {
     /// The unique player ID to uniquely designate this player.
     id: u32,
@@ -21,6 +22,7 @@ pub(crate) struct Player<'a> {
     turn_action: PlayerTurnStatus,
 }
 
+#[derive(Debug)]
 pub(crate) enum PlayerTurnStatus {
     /// The player is not doing anything.
     /// Usually, this is at the beginning of the turn.
@@ -35,11 +37,13 @@ pub(crate) enum PlayerTurnStatus {
     Responded(PlayerTurnResponse),
 }
 
+#[derive(Debug)]
 struct PlayerTurnRequest {
     turn_start: u32,
     vision: Grid,
 }
 
+#[derive(Debug)]
 struct PlayerTurnResponse {
     turn_start: u32,
     turn_end: u32,

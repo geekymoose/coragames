@@ -4,6 +4,7 @@ use crate::terrain::Config;
 use crate::terrain::Grid;
 use std::collections::HashMap;
 
+#[derive(Debug)]
 pub struct Game<'a> {
     current_turn: usize,
     gamegrid: Grid,
