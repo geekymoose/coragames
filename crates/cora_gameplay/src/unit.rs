@@ -1,13 +1,15 @@
-use crate::terrain::{Cell, Direction};
+use crate::terrain::Direction;
 
 /// Represents one unit currently ingame.
 /// A unit is a something that can interact in the grid, move, attack.
 /// It is meant to be controlled by a player or an AI.
+#[derive(Debug)]
 pub(crate) struct Unit {
     health: u32,
     strength: u32,
 }
 
+#[derive(Debug)]
 struct DamageStat {
     effective_damage: u32,
     extra_ammount: u32,

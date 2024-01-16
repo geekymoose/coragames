@@ -18,6 +18,7 @@ fn main() {
 
     loop {
         println!("Playing one turn...");
+        println!("--- DEBUG (dumping game data): ---\n{:?}", game);
 
         // let turn_action_requests = game.start_turn();
         // for a in turn_action_requests {
