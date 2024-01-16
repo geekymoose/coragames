@@ -3,15 +3,14 @@ pub struct Config {
     pub height: usize,
 }
 
-pub(crate) struct Grid<'a> {
+pub(crate) struct Grid {
     config: Config,
-    cells: Vec<Vec<Cell<'a>>>,
+    cells: Vec<Vec<Cell>>,
 }
 
-pub(crate) struct Cell<'a> {
+pub(crate) struct Cell {
     x: usize,
     y: usize,
-    grid: &'a Grid<'a>,
     terrain_type: EnvironmentType,
 }
 
@@ -27,23 +26,32 @@ pub(crate) enum EnvironmentType {
     Impassable,
 }
 
-impl<'a> Grid<'a> {
+impl Grid {
     pub(crate) fn new(config: Config) -> Self {
-        todo!("Not Implemented");
+        let mut grid = Grid {
+            config,
+            cells: vec![vec![]],
+        };
+        grid.generate_random_cells();
+        return grid;
+    }
+
+    fn generate_random_cells(&mut self) {
+        self.cells.clear();
+        self.cells.reserve(self.config.width);
+
+        for x in 0..self.config.width {
+            self.cells.reserve(self.config.height);
+            for y in 0..self.config.height {
+                let cell = Cell::new(x, y, EnvironmentType::Movable);
+                self.cells[x].push(cell);
+            }
+        }
     }
 }
 
-impl<'a> Cell<'a> {
-    pub(crate) fn new(x: usize, y: usize, grid: &'a Grid, terrain_type: EnvironmentType) -> Self {
-        Self {
-            x,
-            y,
-            grid,
-            terrain_type,
-        }
-    }
-
-    pub(crate) fn neighbor_at_direction(&self, direction: &Direction) -> Option<Cell<'a>> {
-        todo!("Not Implemented");
+impl Cell {
+    pub(crate) fn new(x: usize, y: usize, terrain_type: EnvironmentType) -> Self {
+        Self { x, y, terrain_type }
     }
 }
