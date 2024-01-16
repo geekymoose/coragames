@@ -4,7 +4,7 @@ use crate::unit::Unit;
 
 /// A Player is an entity which controls one unit and decides its actions at each turn.
 /// You can view it as the physical player in a boardgame for instance.
-pub(crate) struct Player<'a, 'b> {
+pub(crate) struct Player<'a> {
     /// The unique player ID to uniquely designate this player.
     id: u32,
 
@@ -13,31 +13,31 @@ pub(crate) struct Player<'a, 'b> {
 
     /// The unit currently controlled by the player.
     /// One unit should be controlled by exactly one player.
-    unit: &'a Unit<'a>,
+    unit: &'a Unit,
 
     /// Each turn, the player has to compute an action.
     /// This is the current request ongoing and it's possible response when computed.
     /// If None, it means the player is currently not computing anything (e.g., start of the turn).
-    turn_action: PlayerTurnStatus<'b>,
+    turn_action: PlayerTurnStatus,
 }
 
-pub(crate) enum PlayerTurnStatus<'a> {
+pub(crate) enum PlayerTurnStatus {
     /// The player is not doing anything.
     /// Usually, this is at the beginning of the turn.
     Idle,
 
     /// The player is computing an action.
     /// This holds the data used for the request.
-    Computing(PlayerTurnRequest<'a>),
+    Computing(PlayerTurnRequest),
 
     /// The player responded with an action to do.
     /// This holds the response data (the action).
     Responded(PlayerTurnResponse),
 }
 
-struct PlayerTurnRequest<'a> {
+struct PlayerTurnRequest {
     turn_start: u32,
-    vision: Grid<'a>,
+    vision: Grid,
 }
 
 struct PlayerTurnResponse {
@@ -46,7 +46,7 @@ struct PlayerTurnResponse {
     action: Action,
 }
 
-impl<'a, 'b> Player<'a, 'b> {
+impl<'a> Player<'a> {
     /// Creates a new player for the provided unit.
     pub(crate) fn new(id: u32, name: String, unit: &'a Unit) -> Self {
         Self {
