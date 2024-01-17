@@ -6,7 +6,7 @@ use std::collections::HashMap;
 
 #[derive(Debug)]
 pub struct Game<'a> {
-    current_turn: usize,
+    current_turn: u32,
     gamegrid: Grid,
     players: HashMap<u32, Player<'a>>,
 }
@@ -18,10 +18,6 @@ impl<'a> Game<'a> {
             gamegrid: Grid::new(config),
             players: HashMap::new(),
         }
-    }
-
-    pub fn register_player_action_turn(&mut self, player_id: &u32, player_action: Action) {
-        todo!("Not Implemented");
     }
 
     pub fn apply_turn(&mut self) {

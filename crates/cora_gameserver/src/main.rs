@@ -31,5 +31,5 @@ fn main() {
         game.apply_turn();
     }
 
-    println!("--- Cora GameServer stops ---");
+    //println!("--- Cora GameServer stops ---");
 }
