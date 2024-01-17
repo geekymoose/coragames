@@ -14,7 +14,7 @@ pub(crate) struct Unit {
 }
 
 #[derive(Debug)]
-struct UnitVision {
+pub(crate) struct UnitVision {
     vision_range: usize,
     vision_width: usize,
     vision_height: usize,
@@ -22,7 +22,7 @@ struct UnitVision {
 }
 
 #[derive(Debug)]
-struct UnitVisionData {
+pub(crate) struct UnitVisionData {
     terrain_type: EnvironmentType,
 }
 
@@ -55,7 +55,6 @@ impl Unit {
     pub(crate) fn movement(&mut self, x: usize, y: usize) {
         self.pos_world_x = x;
         self.pos_world_y = y;
-        self.vision.update_vision();
     }
 
     pub(crate) fn attack(&mut self, enemy: &mut Unit) -> DamageStat {
@@ -63,6 +62,14 @@ impl Unit {
         let dmg = enemy.take_damage(self.strength);
         self.energy -= self.strength;
         return dmg;
+    }
+
+    pub(crate) fn vision(&self) -> &UnitVision {
+        return &self.vision;
+    }
+
+    pub(crate) fn update_vision(&mut self) {
+        self.vision.update_vision();
     }
 
     pub(crate) fn is_alive(&self) -> bool {
@@ -110,7 +117,7 @@ impl UnitVision {
         }
     }
 
-    fn update_vision(&mut self) {
+    pub(crate) fn update_vision(&mut self) {
         todo!("Not Implemented");
     }
 }
