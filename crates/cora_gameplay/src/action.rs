@@ -9,8 +9,8 @@ pub(crate) enum Action {
 
 pub(crate) fn apply_action(action: Action, unit: &mut Unit) {
     match action {
-        Action::Move(direction) => unit.movement(direction),
-        Action::Attack(direction) => unit.attack(direction),
-        Action::Interact(direction) => unit.interact(direction),
+        Action::Move(direction) => todo!("Not Implemented"),
+        Action::Attack(direction) => todo!("Not Implemented"),
+        Action::Interact(direction) => todo!("Not Implemented"),
     }
 }
