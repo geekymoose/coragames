@@ -1,5 +1,11 @@
 use crate::terrain::EnvironmentType;
 
+// TODO This is to improve (for now, just easy WIP)
+pub(crate) const DEFAULT_UNIT_VISION_RANGE: usize = 5;
+pub(crate) const DEFAULT_UNIT_STRENGTH: u32 = 10;
+pub(crate) const DEFAULT_UNIT_HEALTH: u32 = 100;
+pub(crate) const DEFAULT_UNIT_ENERGY: u32 = 100;
+
 /// Represents one unit currently ingame.
 /// A unit is a something that can interact in the grid, move, attack.
 /// It is meant to be controlled by a player or an AI.
@@ -118,6 +124,7 @@ impl UnitVision {
     }
 
     pub(crate) fn update_vision(&mut self) {
+        // TODO fixme
         todo!("Not Implemented");
     }
 }

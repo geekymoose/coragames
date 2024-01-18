@@ -1,4 +1,4 @@
-use crate::{terrain::Direction, unit::Unit};
+use crate::terrain::Direction;
 
 #[derive(Debug)]
 pub(crate) enum Action {
@@ -7,10 +7,10 @@ pub(crate) enum Action {
     Interact(Direction),
 }
 
-pub(crate) fn apply_action(action: Action, unit: &mut Unit) {
+pub(crate) fn apply_action(action: Action) {
     match action {
-        Action::Move(direction) => todo!("Not Implemented"),
-        Action::Attack(direction) => todo!("Not Implemented"),
-        Action::Interact(direction) => todo!("Not Implemented"),
+        Action::Move(_) => todo!("Not Implemented"),
+        Action::Attack(_) => todo!("Not Implemented"),
+        Action::Interact(_) => todo!("Not Implemented"),
     }
 }
