@@ -54,7 +54,10 @@ impl Grid {
         self.cells.reserve(self.config.width);
 
         for x in 0..self.config.width {
-            self.cells[x].reserve(self.config.height);
+            let mut column = vec![];
+            column.reserve(self.config.height);
+            self.cells.push(column);
+
             for y in 0..self.config.height {
                 let cell = Cell::new(x, y, EnvironmentType::Movable);
                 self.cells[x].push(cell);
