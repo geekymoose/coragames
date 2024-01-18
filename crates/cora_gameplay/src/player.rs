@@ -83,7 +83,7 @@ impl<'a> Player<'a> {
                 };
                 self.turn_action = PlayerTurnStatus::Computing(turn_request);
 
-                todo!("WIP Not Implemented"); // TODO Fixme
+                todo!("WIP Not Implemented"); // TODO Fixme (return the TurnInfo)
             }
             PlayerTurnStatus::Computing(_) => {
                 // Already doing someting.
@@ -94,6 +94,14 @@ impl<'a> Player<'a> {
                 return None;
             }
         }
+    }
+
+    pub(crate) fn register_turn_action(
+        &mut self,
+        turn_counter: u32,
+        response: Action,
+    ) -> Result<bool, &'static str> {
+        todo!("Not Implemented"); // TODO Fixme
     }
 
     pub(crate) fn apply_turn_action(&mut self) {

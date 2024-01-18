@@ -1,4 +1,4 @@
-use cora_gameplay::game::Game;
+use cora_gameplay::{action::Action, game::Game, terrain::Direction};
 use std::{thread, time::Duration};
 
 const TURN_DURECTION_SEC: u64 = 1;
@@ -20,13 +20,11 @@ fn main() {
         println!("Playing one turn...");
         println!("--- DEBUG (dumping game data): ---\n{:?}", game);
 
-        // let turn_action_requests = game.start_turn();
-        // for a in turn_action_requests {
-        //      TODO send action
-        // }
-        // TODO Listen for action during TURN_DURECTION_SEC seconds
-        // game.register_player_action_turn
-        // game.end_turn()
+        game.request_turn_action();
+
+        game.register_player_response(1, Action::Move(Direction::Up));
+        game.register_player_response(2, Action::Move(Direction::Up));
+
         thread::sleep(Duration::from_secs(TURN_DURECTION_SEC));
         game.apply_turn();
     }
