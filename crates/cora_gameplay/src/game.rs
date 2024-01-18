@@ -1,3 +1,4 @@
+use crate::action::Action;
 use crate::player::Player;
 use crate::terrain::Config;
 use crate::terrain::Grid;
@@ -36,6 +37,25 @@ impl<'a> Game<'a> {
             //return Ok(&player);
             todo!("WIP Not Implemented");
         }
+    }
+
+    pub fn request_turn_action(&mut self) {
+        self.players.values_mut().for_each(|p: &mut Player| {
+            p.request_turn_action(self.current_turn);
+        });
+    }
+
+    pub fn register_player_response(
+        &mut self,
+        player_id: u32,
+        action: Action,
+    ) -> Result<bool, &'static str> {
+        let player: &mut Player = match self.players.get_mut(&player_id) {
+            Some(p) => p,
+            None => return Err("The requested player doesn't exists in-game"),
+        };
+
+        return player.register_turn_action(self.current_turn, action);
     }
 
     pub fn apply_turn(&mut self) {

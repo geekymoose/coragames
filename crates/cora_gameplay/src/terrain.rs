@@ -26,7 +26,7 @@ pub(crate) struct Cell {
 }
 
 #[derive(Debug)]
-pub(crate) enum Direction {
+pub enum Direction {
     Up,
     Down,
     Left,

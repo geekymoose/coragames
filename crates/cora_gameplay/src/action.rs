@@ -1,7 +1,7 @@
 use crate::terrain::Direction;
 
 #[derive(Debug)]
-pub(crate) enum Action {
+pub enum Action {
     Move(Direction),
     Attack(Direction),
     Interact(Direction),
