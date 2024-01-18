@@ -13,8 +13,8 @@ fn main() {
 
     let mut game: Game = Game::new(config);
 
-    // game.spawn_player("player1");
-    // game.spawn_player("player2");
+    add_player(1, String::from("player1"), &mut game);
+    add_player(2, String::from("player2"), &mut game);
 
     loop {
         println!("Playing one turn...");
@@ -32,4 +32,18 @@ fn main() {
     }
 
     //println!("--- Cora GameServer stops ---");
+}
+
+fn add_player(id: u32, name: String, game: &mut Game) {
+    match game.add_player(id, name) {
+        Ok(player) => println!(
+            "Player successfully added: ID: {} // Name: {}",
+            player.id(),
+            player.name()
+        ),
+        Err(msg) => println!(
+            "Unable to create player. ID: {}\nError message: {}",
+            id, msg
+        ),
+    }
 }

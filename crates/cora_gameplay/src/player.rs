@@ -5,7 +5,7 @@ use crate::unit::UnitVision;
 /// A Player is an entity which controls one unit and decides its actions at each turn.
 /// You can view it as the physical player in a boardgame for instance.
 #[derive(Debug)]
-pub(crate) struct Player<'a> {
+pub struct Player<'a> {
     /// The unique player ID to uniquely designate this player.
     id: u32,
 
@@ -83,7 +83,7 @@ impl<'a> Player<'a> {
                 };
                 self.turn_action = PlayerTurnStatus::Computing(turn_request);
 
-                todo!("WIP Not Implemented");
+                todo!("WIP Not Implemented"); // TODO Fixme
             }
             PlayerTurnStatus::Computing(_) => {
                 // Already doing someting.
@@ -104,8 +104,9 @@ impl<'a> Player<'a> {
             PlayerTurnStatus::Computing(_) => {
                 // The player did not responded yet. Too bad.
             }
-            PlayerTurnStatus::Responded(response) => {
-                //action::apply_action(response.action, &mut self.unit);
+            PlayerTurnStatus::Responded(_) => {
+                todo!("WIP Not Implemented"); // TODO Fixme
+                                              //action::apply_action(response.action, &mut self.unit);
             }
         }
     }
