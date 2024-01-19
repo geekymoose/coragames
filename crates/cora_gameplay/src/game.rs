@@ -1,5 +1,6 @@
 use crate::action::Action;
 use crate::player::Player;
+use crate::player::PlayerTurnRequest;
 use crate::terrain::Config;
 use crate::terrain::Grid;
 use std::collections::HashMap;
@@ -20,17 +21,17 @@ impl<'a> Game<'a> {
         }
     }
 
-    pub fn add_player(&mut self, id: u32, name: String) -> Result<&Player, String> {
+    pub fn add_player(&mut self, id: u32, name: String) -> Result<&Player, &'static str> {
         // TODO Improve the errors (for now, just a simple WIP with strings)
 
         let unit = match self.gamegrid.spwan_random_unit() {
             Some(unit) => unit,
-            None => return Err(String::from("Unable to spwan a new Unit for the player")),
+            None => return Err("Unable to spwan a new Unit for the player"),
         };
         let player = Player::new(id, name, &unit);
 
         if self.players.contains_key(&id) {
-            return Err(String::from("Unable to add player: the ID already exists"));
+            return Err("Unable to add player: the ID already exists");
         } else {
             // TODO Fixme
             //self.players.insert(id, player);
