@@ -1,8 +1,7 @@
 use rand::Rng;
 
 use crate::unit::{
-    Unit, DEFAULT_UNIT_ENERGY, DEFAULT_UNIT_HEALTH, DEFAULT_UNIT_STRENGTH,
-    DEFAULT_UNIT_VISION_RANGE,
+    Unit, DEFAULT_UNIT_HEALTH, DEFAULT_UNIT_STRENGTH, DEFAULT_UNIT_VISION_RANGE,
 };
 
 #[derive(Debug)]
@@ -152,7 +151,6 @@ impl Grid {
             spawn_cell.y(),
             DEFAULT_UNIT_HEALTH,
             DEFAULT_UNIT_STRENGTH,
-            DEFAULT_UNIT_ENERGY,
             DEFAULT_UNIT_VISION_RANGE,
         );
 

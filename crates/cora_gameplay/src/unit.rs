@@ -4,7 +4,6 @@ use crate::terrain::EnvironmentType;
 pub(crate) const DEFAULT_UNIT_VISION_RANGE: usize = 5;
 pub(crate) const DEFAULT_UNIT_STRENGTH: u32 = 10;
 pub(crate) const DEFAULT_UNIT_HEALTH: u32 = 100;
-pub(crate) const DEFAULT_UNIT_ENERGY: u32 = 100;
 
 /// Represents one unit currently ingame.
 /// A unit is a something that can interact in the grid, move, attack.
@@ -16,7 +15,6 @@ pub(crate) struct Unit {
     vision: UnitVision,
     health: u32,
     strength: u32,
-    energy: u32,
 }
 
 #[derive(Debug)]
@@ -45,7 +43,6 @@ impl Unit {
         pos_world_y: usize,
         health: u32,
         strength: u32,
-        energy: u32,
         vision_range: usize,
     ) -> Self {
         Self {
@@ -54,7 +51,6 @@ impl Unit {
             vision: UnitVision::new(vision_range),
             health,
             strength,
-            energy,
         }
     }
 
@@ -66,7 +62,6 @@ impl Unit {
     pub(crate) fn attack(&mut self, enemy: &mut Unit) -> DamageStat {
         // TODO Improve with range check etc (return Result with possible errors)
         let dmg = enemy.take_damage(self.strength);
-        self.energy -= self.strength;
         return dmg;
     }
 
@@ -116,7 +111,6 @@ impl UnitVision {
     }
 
     pub(crate) fn update_vision(&mut self) {
-        // TODO fixme
-        todo!("Not Implemented");
+        todo!("Not Implemented"); // TODO fixme
     }
 }
