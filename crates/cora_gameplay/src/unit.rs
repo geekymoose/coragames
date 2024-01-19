@@ -33,7 +33,7 @@ pub(crate) struct UnitVisionData {
 }
 
 #[derive(Debug)]
-struct DamageStat {
+pub(crate) struct DamageStat {
     effective_damage: u32,
     extra_ammount: u32,
     killshot: bool,
@@ -76,14 +76,6 @@ impl Unit {
 
     pub(crate) fn update_vision(&mut self) {
         self.vision.update_vision();
-    }
-
-    pub(crate) fn is_alive(&self) -> bool {
-        self.health > 0
-    }
-
-    pub(crate) fn is_dead(&self) -> bool {
-        !self.is_alive()
     }
 
     fn take_damage(&mut self, damages: u32) -> DamageStat {

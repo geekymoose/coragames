@@ -11,7 +11,7 @@ fn main() {
         height: 100,
     };
 
-    let mut game: Game = Game::new(config);
+    let mut game = Game::new(config);
 
     add_player(1, String::from("player1"), &mut game);
     add_player(2, String::from("player2"), &mut game);
