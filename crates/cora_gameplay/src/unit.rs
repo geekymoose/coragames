@@ -1,9 +1,9 @@
 use crate::terrain::EnvironmentType;
 
 // TODO This is to improve (for now, just easy WIP)
-pub(crate) const DEFAULT_UNIT_VISION_RANGE: usize = 5;
-pub(crate) const DEFAULT_UNIT_STRENGTH: u32 = 10;
-pub(crate) const DEFAULT_UNIT_HEALTH: u32 = 100;
+const DEFAULT_UNIT_VISION_RANGE: usize = 5;
+const DEFAULT_UNIT_STRENGTH: u32 = 10;
+const DEFAULT_UNIT_HEALTH: u32 = 100;
 
 /// Represents one unit currently ingame.
 /// A unit is a something that can interact in the grid, move, attack.
@@ -51,6 +51,16 @@ impl Unit {
             vision: UnitVision::new(vision_range),
             health,
             strength,
+        }
+    }
+
+    pub(crate) fn new_default(pos_world_x: usize, pos_world_y: usize) -> Self {
+        Self {
+            pos_world_x,
+            pos_world_y,
+            vision: UnitVision::new(DEFAULT_UNIT_VISION_RANGE),
+            health: DEFAULT_UNIT_HEALTH,
+            strength: DEFAULT_UNIT_STRENGTH,
         }
     }
 
