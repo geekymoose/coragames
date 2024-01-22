@@ -1,8 +1,6 @@
 use rand::Rng;
 
-use crate::unit::{
-    Unit, DEFAULT_UNIT_HEALTH, DEFAULT_UNIT_STRENGTH, DEFAULT_UNIT_VISION_RANGE,
-};
+use crate::unit::Unit;
 
 #[derive(Debug)]
 pub struct Config {
@@ -146,13 +144,7 @@ impl Grid {
             None => return None,
         };
 
-        let spawn_unit = Unit::new(
-            spawn_cell.x(),
-            spawn_cell.y(),
-            DEFAULT_UNIT_HEALTH,
-            DEFAULT_UNIT_STRENGTH,
-            DEFAULT_UNIT_VISION_RANGE,
-        );
+        let spawn_unit = Unit::new_default(spawn_cell.x(), spawn_cell.y());
 
         spawn_cell.unit = Some(spawn_unit);
         return match &spawn_cell.unit {
