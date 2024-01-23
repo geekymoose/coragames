@@ -1,5 +1,3 @@
-// TODO WIP
-
 fn main() {
     println!("Cora GameAgent stars...");
 
