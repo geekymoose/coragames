@@ -1,8 +1,8 @@
 mod status_service;
 
-use tonic::transport::Server;
-use status_service::StatusService;
 use status_service::status_service::status_service_rpc_server::StatusServiceRpcServer;
+use status_service::StatusService;
+use tonic::transport::Server;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
