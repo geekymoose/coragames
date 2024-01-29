@@ -36,6 +36,31 @@ pub(crate) enum EnvironmentType {
     Impassable,
 }
 
+pub fn move_unit(
+    unit: &mut Unit,
+    terrain: &mut Grid,
+    direction: Direction,
+) -> Result<(), &'static str> {
+    todo!("Not Implemented");
+    /*
+    let x = unit.pos_world_x;
+    let y = unit.pos_world_y;
+
+    let origin_cell_option = terrain.get_mut_cell_at_pos(x, y);
+    let dest_option = terrain.get_neighbor_at_direction(x, y, direction);
+
+    terrain.move_unit(unit, origin_cell.unwrap(), dest_option.unwrap());
+
+    match dest_option {
+        Some(dest) => {
+            let dest_cell = terrain.get_mut_cell_at_pos(dest.0, dest.1);
+            terrain.move_unit(unit, origin_cell.unwrap(), dest_cell.unwrap());
+        }
+        None => todo!(),
+    }
+    */
+}
+
 impl Grid {
     pub(crate) fn new(config: Config) -> Self {
         let mut grid = Grid {
@@ -69,14 +94,55 @@ impl Grid {
         return None;
     }
 
-    fn get_mut_cell_at_pos(&mut self, x: usize, y: usize) -> Option<&mut Cell> {
+         fn get_mut_cell_at_pos(&mut self, x: usize, y: usize) -> Option<&mut Cell> {
         if self.is_valid_coordinates(x, y) {
             return Some(&mut self.cells[x][y]);
         }
         return None;
     }
 
-    fn get_neighbor_at_direction(&self, x: usize, y: usize, direction: Direction) -> Option<&Cell> {
+    fn get_neighbor_at_direction(
+        &self,
+        x: usize,
+        y: usize,
+        direction: Direction,
+    ) -> Option<&Cell> {
+        if !self.is_valid_coordinates(x, y) {
+            return None;
+        }
+
+        let new_coord_option = self.get_neighbor_coord_at_direction(x, y, direction);
+
+        return match new_coord_option {
+            Some(new_coord) => self.get_cell_at_pos(new_coord.0, new_coord.1),
+            None => None,
+        };
+    }
+
+    pub fn get_mut_neighbor_at_direction(
+        &mut self,
+        x: usize,
+        y: usize,
+        direction: Direction,
+    ) -> Option<&mut Cell> {
+        if !self.is_valid_coordinates(x, y) {
+            return None;
+        }
+
+        let new_coord_option = self.get_neighbor_coord_at_direction(x, y, direction);
+
+        return match new_coord_option {
+            Some(new_coord) => self.get_mut_cell_at_pos(new_coord.0, new_coord.1),
+            None => None,
+        };
+    }
+
+    pub fn get_neighbor_coord_at_direction(
+        &self,
+        x: usize,
+        y: usize,
+        direction: Direction,
+    ) -> Option<(usize, usize)> {
         if !self.is_valid_coordinates(x, y) {
             return None;
         }
@@ -99,7 +165,7 @@ impl Grid {
             }
         }
 
-        return self.get_cell_at_pos(dir_x, dir_y);
+        return Some((dir_x, dir_y));
     }
 
     fn is_valid_coordinates(&self, x: usize, y: usize) -> bool {
@@ -131,6 +197,17 @@ impl Grid {
                 }
             }
         }
+    }
+
+    fn move_unit(
+        &mut self,
+        unit: &mut Unit,
+        origin: &mut Cell,
+        dest: &mut Cell,
+    ) -> Result<(), &'static str> {
+        unit.movement(dest.x, dest.y);
+        dest.unit = origin.unit.take();
+        return Ok(());
     }
 
     pub(crate) fn spwan_random_unit(&mut self) -> Option<&Unit> {

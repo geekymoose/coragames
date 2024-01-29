@@ -10,8 +10,9 @@ const DEFAULT_UNIT_HEALTH: u32 = 100;
 /// It is meant to be controlled by a player or an AI.
 #[derive(Debug)]
 pub(crate) struct Unit {
-    pos_world_x: usize,
-    pos_world_y: usize,
+    // TODO To update with methods
+    pub pos_world_x: usize,
+    pub pos_world_y: usize,
     vision: UnitVision,
     health: u32,
     strength: u32,
