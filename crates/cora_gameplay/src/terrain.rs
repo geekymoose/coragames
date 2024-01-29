@@ -14,6 +14,11 @@ pub(crate) struct Grid {
     cells: Vec<Vec<Cell>>,
 }
 
+pub(crate) struct GridCoordinate {
+    x: usize,
+    y: usize,
+}
+
 #[derive(Debug)]
 pub(crate) struct Cell {
     x: usize,
@@ -49,7 +54,7 @@ pub(crate) fn move_unit(
         None => return Err("The requested move has reach the border and cannot be applied"),
     };
 
-    if (!terrain.is_cell_free_at_coord(dest_coord.0, dest_coord.1)) {
+    if (!terrain.is_cell_free_at_coord(dest_coord.x, dest_coord.y)) {
         return Err("Cannot move the Unit, the dest cell has already a Unit");
     }
 
@@ -120,7 +125,7 @@ impl Grid {
         let new_coord_option = self.get_neighbor_coord_at_direction(x, y, &direction);
 
         return match new_coord_option {
-            Some(new_coord) => self.get_cell_at_pos(new_coord.0, new_coord.1),
+            Some(new_coord) => self.get_cell_at_pos(new_coord.x, new_coord.y),
             None => None,
         };
     }
@@ -138,7 +143,7 @@ impl Grid {
         let new_coord_option = self.get_neighbor_coord_at_direction(x, y, &direction);
 
         return match new_coord_option {
-            Some(new_coord) => self.get_mut_cell_at_pos(new_coord.0, new_coord.1),
+            Some(new_coord) => self.get_mut_cell_at_pos(new_coord.x, new_coord.y),
             None => None,
         };
     }
@@ -148,7 +153,7 @@ impl Grid {
         x: usize,
         y: usize,
         direction: &Direction,
-    ) -> Option<(usize, usize)> {
+    ) -> Option<GridCoordinate> {
         if !self.is_valid_coordinates(x, y) {
             return None;
         }
@@ -171,7 +176,7 @@ impl Grid {
             }
         }
 
-        return Some((dir_x, dir_y));
+        return Some(GridCoordinate { x: dir_x, y: dir_y });
     }
 
     fn is_valid_coordinates(&self, x: usize, y: usize) -> bool {
