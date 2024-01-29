@@ -1,8 +1,6 @@
-use std::cell;
-
 use rand::Rng;
 
-use crate::unit::{self, Unit};
+use crate::unit::Unit;
 
 #[derive(Debug)]
 pub struct Config {
@@ -38,7 +36,7 @@ pub(crate) enum EnvironmentType {
     Impassable,
 }
 
-pub fn move_unit(
+pub(crate) fn move_unit(
     unit: &mut Unit,
     terrain: &mut Grid,
     direction: Direction,
