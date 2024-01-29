@@ -58,14 +58,18 @@ pub(crate) fn move_unit(
         None => return Err("Unable to get the destination cell where to move the unit"),
     };
 
-    let unit = match terrain.remove_unit_from_coord(x, y) {
+    let dest_x = dest_cell.x();
+    let dest_y = dest_cell.y();
+
+    match terrain.remove_unit_from_coord(dest_x, dest_y) {
         Ok(unit_option) => match unit_option {
             Some(value) => value,
             None => return Err("The grid cell has no unit at this position"),
         },
         Err(msg) => return Err(msg),
     };
-    todo!("WIP");
+
+    return Ok(());
 }
 
 impl Grid {
