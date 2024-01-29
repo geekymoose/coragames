@@ -1,6 +1,8 @@
+use std::cell;
+
 use rand::Rng;
 
-use crate::unit::Unit;
+use crate::unit::{self, Unit};
 
 #[derive(Debug)]
 pub struct Config {
@@ -41,24 +43,31 @@ pub fn move_unit(
     terrain: &mut Grid,
     direction: Direction,
 ) -> Result<(), &'static str> {
-    todo!("Not Implemented");
-    /*
     let x = unit.pos_world_x;
     let y = unit.pos_world_y;
 
-    let origin_cell_option = terrain.get_mut_cell_at_pos(x, y);
-    let dest_option = terrain.get_neighbor_at_direction(x, y, direction);
+    let dest_coord = match terrain.get_neighbor_coord_at_direction(x, y, &direction) {
+        Some(coord) => coord,
+        None => return Err("The requested move has reach the border and cannot be applied"),
+    };
 
-    terrain.move_unit(unit, origin_cell.unwrap(), dest_option.unwrap());
-
-    match dest_option {
-        Some(dest) => {
-            let dest_cell = terrain.get_mut_cell_at_pos(dest.0, dest.1);
-            terrain.move_unit(unit, origin_cell.unwrap(), dest_cell.unwrap());
-        }
-        None => todo!(),
+    if (!terrain.is_cell_free_at_coord(dest_coord.0, dest_coord.1)) {
+        return Err("Cannot move the Unit, the dest cell has already a Unit");
     }
-    */
+
+    let dest_cell = match terrain.get_mut_neighbor_at_direction(x, y, direction) {
+        Some(value) => value,
+        None => return Err("Unable to get the destination cell where to move the unit"),
+    };
+
+    let unit = match terrain.remove_unit_from_coord(x, y) {
+        Ok(unit_option) => match unit_option {
+            Some(value) => value,
+            None => return Err("The grid cell has no unit at this position"),
+        },
+        Err(msg) => return Err(msg),
+    };
+    todo!("WIP");
 }
 
 impl Grid {
@@ -94,24 +103,19 @@ impl Grid {
         return None;
     }
 
-         fn get_mut_cell_at_pos(&mut self, x: usize, y: usize) -> Option<&mut Cell> {
+    fn get_mut_cell_at_pos(&mut self, x: usize, y: usize) -> Option<&mut Cell> {
         if self.is_valid_coordinates(x, y) {
             return Some(&mut self.cells[x][y]);
         }
         return None;
     }
 
-    fn get_neighbor_at_direction(
-        &self,
-        x: usize,
-        y: usize,
-        direction: Direction,
-    ) -> Option<&Cell> {
+    fn get_neighbor_at_direction(&self, x: usize, y: usize, direction: Direction) -> Option<&Cell> {
         if !self.is_valid_coordinates(x, y) {
             return None;
         }
 
-        let new_coord_option = self.get_neighbor_coord_at_direction(x, y, direction);
+        let new_coord_option = self.get_neighbor_coord_at_direction(x, y, &direction);
 
         return match new_coord_option {
             Some(new_coord) => self.get_cell_at_pos(new_coord.0, new_coord.1),
@@ -129,7 +133,7 @@ impl Grid {
             return None;
         }
 
-        let new_coord_option = self.get_neighbor_coord_at_direction(x, y, direction);
+        let new_coord_option = self.get_neighbor_coord_at_direction(x, y, &direction);
 
         return match new_coord_option {
             Some(new_coord) => self.get_mut_cell_at_pos(new_coord.0, new_coord.1),
@@ -141,7 +145,7 @@ impl Grid {
         &self,
         x: usize,
         y: usize,
-        direction: Direction,
+        direction: &Direction,
     ) -> Option<(usize, usize)> {
         if !self.is_valid_coordinates(x, y) {
             return None;
@@ -208,6 +212,56 @@ impl Grid {
         unit.movement(dest.x, dest.y);
         dest.unit = origin.unit.take();
         return Ok(());
+    }
+
+    fn is_cell_free(&self, cell: &Cell) -> bool {
+        return match cell.unit {
+            Some(_) => false,
+            None => true,
+        };
+    }
+
+    fn is_cell_free_at_coord(&self, x: usize, y: usize) -> bool {
+        let cell = match self.get_cell_at_pos(x, y) {
+            Some(value) => value,
+            None => return false,
+        };
+        return self.is_cell_free(cell);
+    }
+
+    fn place_unit_at_cell(&mut self, mut unit: Unit, cell: &mut Cell) -> Result<(), Unit> {
+        match cell.unit {
+            Some(_) => return Err(unit),
+            None => {
+                unit.movement(cell.x(), cell.y());
+                cell.unit = Some(unit)
+            }
+        }
+        return Ok(());
+    }
+
+    fn place_unit_at_coord(&mut self, mut unit: Unit, x: usize, y: usize) -> Result<(), Unit> {
+        match self.get_mut_cell_at_pos(x, y) {
+            Some(cell) => {
+                cell.unit = Some(unit);
+                return Ok(());
+            }
+            None => return Err(unit),
+        };
+    }
+
+    fn remove_unit_from_cell(&mut self, cell: &mut Cell) -> Result<Option<Unit>, &'static str> {
+        match &cell.unit {
+            Some(unit) => return Ok(cell.unit.take()),
+            None => return Ok(None),
+        }
+    }
+
+    fn remove_unit_from_coord(&mut self, x: usize, y: usize) -> Result<Option<Unit>, &'static str> {
+        return match self.get_mut_cell_at_pos(x, y) {
+            Some(value) => Ok(value.unit.take()),
+            None => Err("Unable to remove, the coordinates are invalid"),
+        };
     }
 
     pub(crate) fn spwan_random_unit(&mut self) -> Option<&Unit> {

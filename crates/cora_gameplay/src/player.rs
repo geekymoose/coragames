@@ -1,3 +1,4 @@
+use crate::action;
 use crate::action::Action;
 use crate::unit::Unit;
 use crate::unit::UnitVision;
@@ -112,9 +113,9 @@ impl<'a> Player<'a> {
             PlayerTurnStatus::Computing(_) => {
                 // The player did not responded yet. Too bad.
             }
-            PlayerTurnStatus::Responded(_) => {
-                todo!("WIP Not Implemented"); // TODO Fixme
-                                              //action::apply_action(response.action, &mut self.unit);
+            PlayerTurnStatus::Responded(res) => {
+                todo!("WIP Not Implemented");
+                //action::apply_action(res.action, unit, terrain);
             }
         }
     }
