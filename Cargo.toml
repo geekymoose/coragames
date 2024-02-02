@@ -10,7 +10,7 @@ keywords = ["gamedev", "game", "tilemap"]
 
 
 [workspace]
-resolver = "2"
+resolver = "2" # Important: wgpu/Bevy needs this
 members = [ "crates/*" ]
 #default-members = ["all"]
 
