@@ -1,7 +1,8 @@
 use crate::action::Action;
+use crate::config::GridConfig;
+use crate::grid_map::Grid;
 use crate::player::Player;
-use crate::terrain::Config;
-use crate::terrain::Grid;
+use crate::spawn::spwan_random_unit_in_grid;
 use std::collections::HashMap;
 
 #[derive(Debug)]
@@ -12,7 +13,7 @@ pub struct Game<'a> {
 }
 
 impl<'a> Game<'a> {
-    pub fn new(config: Config) -> Self {
+    pub fn new(config: GridConfig) -> Self {
         Self {
             current_turn: 0,
             gamegrid: Grid::new(config),
@@ -21,18 +22,18 @@ impl<'a> Game<'a> {
     }
 
     pub fn add_player(&mut self, id: u32, name: String) -> Result<bool, &'static str> {
-        let unit = match self.gamegrid.spwan_random_unit() {
-            Some(unit) => unit,
-            None => return Err("Unable to spwan a new Unit for the player"),
+        let unit = match spwan_random_unit_in_grid(&mut self.gamegrid, id) {
+            Ok(unit) => unit,
+            Err(msg) => return Err(msg),
         };
-        let player = Player::new(id, name, &unit);
+        let player = Player::new(id, name, unit);
 
         match self.players.entry(id) {
             std::collections::hash_map::Entry::Occupied(_) => {
                 return Err("Unable to add player: the ID already exists");
             }
             std::collections::hash_map::Entry::Vacant(entry) => {
-                //entry.insert(player);
+                entry.insert(player);
                 return Ok(true);
             }
         }

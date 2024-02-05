@@ -1,13 +1,13 @@
-// TODO TMP example from the previous gameserver, to keep until the new version is working
-use cora_gameplay::{action::Action, game::Game, terrain::Direction};
 use std::{thread, time::Duration};
+
+use cora_gameplay::{action::Action, direction::Direction, game::Game};
 
 const TURN_DURECTION_SEC: u64 = 1;
 
 fn main() {
     println!("--- Cora GameServer starts ---");
 
-    let config: cora_gameplay::terrain::Config = cora_gameplay::terrain::Config {
+    let config: cora_gameplay::config::GridConfig = cora_gameplay::config::GridConfig {
         width: 100,
         height: 100,
     };

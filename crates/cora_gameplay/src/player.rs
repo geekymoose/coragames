@@ -1,5 +1,5 @@
 use crate::action::Action;
-use crate::unit::Unit;
+use crate::grid_unit::GridUnit;
 use crate::vision::GridVision;
 
 /// A Player is an entity which controls one unit and decides its actions at each turn.
@@ -14,7 +14,7 @@ pub struct Player<'a> {
 
     /// The unit currently controlled by the player.
     /// One unit should be controlled by exactly one player.
-    unit: &'a Unit,
+    unit: GridUnit,
 
     /// Each turn, the player has to compute an action.
     /// This is the current request ongoing and it's possible response when computed.
@@ -51,8 +51,7 @@ pub struct PlayerTurnResponse {
 }
 
 impl<'a> Player<'a> {
-    /// Creates a new player for the provided unit.
-    pub(crate) fn new(id: u32, name: String, unit: &'a Unit) -> Self {
+    pub(crate) fn new(id: u32, name: String, unit: GridUnit) -> Self {
         Self {
             id,
             name,
@@ -77,12 +76,13 @@ impl<'a> Player<'a> {
         match &self.turn_action {
             PlayerTurnStatus::Idle => {
                 //self.unit.update_vision();
+                /*
                 let turn_request = PlayerTurnRequest {
                     turn_start: turn_counter,
                     vision: todo!("WIP Not Implemented"),
                 };
                 self.turn_action = PlayerTurnStatus::Computing(turn_request);
-
+                */
                 todo!("WIP Not Implemented"); // TODO Fixme (return the TurnInfo)
             }
             PlayerTurnStatus::Computing(_) => {
