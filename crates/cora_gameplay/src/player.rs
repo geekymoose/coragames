@@ -1,6 +1,6 @@
 use crate::action::Action;
 use crate::unit::Unit;
-use crate::unit::UnitVision;
+use crate::vision::GridVision;
 
 /// A Player is an entity which controls one unit and decides its actions at each turn.
 /// You can view it as the physical player in a boardgame for instance.
@@ -40,7 +40,7 @@ pub enum PlayerTurnStatus<'a> {
 #[derive(Debug)]
 pub struct PlayerTurnRequest<'a> {
     turn_start: u32,
-    vision: &'a UnitVision,
+    vision: &'a GridVision,
 }
 
 #[derive(Debug)]
@@ -79,7 +79,7 @@ impl<'a> Player<'a> {
                 //self.unit.update_vision();
                 let turn_request = PlayerTurnRequest {
                     turn_start: turn_counter,
-                    vision: self.unit.vision(),
+                    vision: todo!("WIP Not Implemented"),
                 };
                 self.turn_action = PlayerTurnStatus::Computing(turn_request);
 
