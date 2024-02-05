@@ -1,5 +1,3 @@
-use crate::terrain::EnvironmentType;
-
 // TODO This is to improve (for now, just easy WIP)
 const DEFAULT_UNIT_VISION_RANGE: usize = 5;
 const DEFAULT_UNIT_STRENGTH: u32 = 10;
@@ -13,22 +11,9 @@ pub(crate) struct Unit {
     // TODO To update with methods
     pub pos_world_x: usize,
     pub pos_world_y: usize,
-    vision: UnitVision,
     health: u32,
     strength: u32,
-}
-
-#[derive(Debug)]
-pub(crate) struct UnitVision {
     vision_range: usize,
-    vision_width: usize,
-    vision_height: usize,
-    vision_grid: Vec<UnitVisionData>,
-}
-
-#[derive(Debug)]
-pub(crate) struct UnitVisionData {
-    terrain_type: EnvironmentType,
 }
 
 #[derive(Debug)]
@@ -49,9 +34,9 @@ impl Unit {
         Self {
             pos_world_x,
             pos_world_y,
-            vision: UnitVision::new(vision_range),
             health,
             strength,
+            vision_range,
         }
     }
 
@@ -59,9 +44,9 @@ impl Unit {
         Self {
             pos_world_x,
             pos_world_y,
-            vision: UnitVision::new(DEFAULT_UNIT_VISION_RANGE),
             health: DEFAULT_UNIT_HEALTH,
             strength: DEFAULT_UNIT_STRENGTH,
+            vision_range: DEFAULT_UNIT_VISION_RANGE,
         }
     }
 
@@ -74,14 +59,6 @@ impl Unit {
         // TODO Improve with range check etc (return Result with possible errors)
         let dmg = enemy.take_damage(self.strength);
         return dmg;
-    }
-
-    pub(crate) fn vision(&self) -> &UnitVision {
-        return &self.vision;
-    }
-
-    pub(crate) fn update_vision(&mut self) {
-        self.vision.update_vision();
     }
 
     fn take_damage(&mut self, damages: u32) -> DamageStat {
@@ -103,25 +80,5 @@ impl Unit {
 
         self.health -= damage_applied.effective_damage;
         return damage_applied;
-    }
-}
-
-impl UnitVision {
-    fn new(vision_range: usize) -> Self {
-        // The vision grid is a square that includes the unit position + the range in all directions (width and height)
-        let row_size = (vision_range * 2) + 1;
-        let column_size = row_size;
-        let vision_grid = Vec::with_capacity(row_size * column_size);
-
-        Self {
-            vision_range,
-            vision_width: row_size,
-            vision_height: column_size,
-            vision_grid: vision_grid,
-        }
-    }
-
-    pub(crate) fn update_vision(&mut self) {
-        todo!("Not Implemented"); // TODO fixme
     }
 }
