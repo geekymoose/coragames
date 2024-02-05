@@ -1,7 +1,4 @@
-use crate::{
-    terrain::{self, Direction, Grid},
-    unit::Unit,
-};
+use crate::{direction::Direction, grid_map::Grid, grid_unit::GridUnit, movement};
 
 #[derive(Debug)]
 pub enum Action {
@@ -10,12 +7,13 @@ pub enum Action {
     Interact(Direction),
 }
 
-pub(crate) fn apply_action(action: Action, unit: &mut Unit, terrain: &mut Grid) {
+pub(crate) fn apply_action(
+    action: Action,
+    unit: GridUnit,
+    grid: &mut Grid,
+) -> Result<GridUnit, &'static str> {
     match action {
-        Action::Move(direction) => match terrain::move_unit(unit, terrain, direction) {
-            Ok(_) => println!("Move action applied"),
-            Err(msg) => println!("Unable to applie the move action: {}", msg),
-        },
+        Action::Move(direction) => return movement::move_unit(unit, grid, direction),
         Action::Attack(_) => todo!("Not Implemented"),
         Action::Interact(_) => todo!("Not Implemented"),
     }

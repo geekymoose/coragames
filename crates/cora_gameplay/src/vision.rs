@@ -1,5 +1,3 @@
-use crate::terrain::EnvironmentType;
-
 #[derive(Debug)]
 pub struct GridVision {
     vision_range: usize,
@@ -10,7 +8,7 @@ pub struct GridVision {
 
 #[derive(Debug)]
 pub struct GridVisionData {
-    terrain_type: EnvironmentType,
+    movable: bool,
     unit: u32,
 }
 

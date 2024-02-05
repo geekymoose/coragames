@@ -1,6 +1,13 @@
 pub mod action;
+pub mod config;
+pub mod direction;
 pub mod game;
+mod grid_cell;
+mod grid_coordinate;
+mod grid_map;
+mod grid_unit;
+mod movement;
 mod player;
-pub mod terrain;
+mod spawn;
 mod unit;
 mod vision;
