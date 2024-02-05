@@ -1,9 +1,6 @@
-use bevy::{
-    app::{App, Plugin, Update},
-    time::{Timer, TimerMode},
-};
+use bevy::app::{App, Plugin, Update};
 
-use crate::resources::turn_timer::TurnTimer;
+use crate::{resources::turn_timer::TurnTimer, systems::game_turns::update_turn};
 
 const TURN_DURATION_IN_SEC: f32 = 1.0;
 
@@ -11,13 +8,7 @@ pub struct GameplayPlugin;
 
 impl Plugin for GameplayPlugin {
     fn build(&self, app: &mut App) {
-        let turn_timer = TurnTimer {
-            timer: Timer::from_seconds(TURN_DURATION_IN_SEC, TimerMode::Repeating),
-            turn_duration_in_sec: TURN_DURATION_IN_SEC,
-            turns_counter: 0,
-        };
-
-        app.insert_resource(turn_timer);
-        //.add_systems(Update, update_turn);
+        app.insert_resource(TurnTimer::new(TURN_DURATION_IN_SEC));
+        app.add_systems(Update, update_turn);
     }
 }
