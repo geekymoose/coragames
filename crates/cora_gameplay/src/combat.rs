@@ -47,6 +47,10 @@ impl Health {
 }
 
 impl Weapon {
+    pub fn new(power: u32) -> Self {
+        Self { power }
+    }
+
     pub fn attack(&mut self, enemy: &mut Health) -> DamageStat {
         // TODO Improve with range check etc (return Result with possible errors)
         let dmg = enemy.take_damage(self.power);

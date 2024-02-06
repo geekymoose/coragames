@@ -6,6 +6,7 @@ use crate::{
 #[derive(Debug)]
 pub struct Unit {
     id: u32,
+    name: String,
     grid_unit: GridUnit,
     health: Health,
     weapon: Weapon,
@@ -15,6 +16,7 @@ pub struct Unit {
 impl Unit {
     pub fn new(
         id: u32,
+        name: String,
         grid_unit: GridUnit,
         health: Health,
         weapon: Weapon,
@@ -22,6 +24,7 @@ impl Unit {
     ) -> Self {
         Self {
             id,
+            name,
             grid_unit,
             health,
             weapon,

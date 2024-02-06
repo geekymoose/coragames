@@ -1,31 +1,40 @@
-use crate::action::Action;
-use crate::config::GridConfig;
+use crate::combat::{Health, Weapon};
+use crate::config::*;
 use crate::grid_map::Grid;
 use crate::player::Player;
 use crate::spawn::spwan_random_unit_in_grid;
+use crate::unit::Unit;
 use std::collections::HashMap;
 
 #[derive(Debug)]
-pub struct Game<'a> {
-    current_turn: u32,
+pub struct Game {
     gamegrid: Grid,
-    players: HashMap<u32, Player<'a>>,
+    players: HashMap<u32, Player>,
 }
 
-impl<'a> Game<'a> {
+impl Game {
     pub fn new(config: GridConfig) -> Self {
         Self {
-            current_turn: 0,
             gamegrid: Grid::new(config),
             players: HashMap::new(),
         }
     }
 
-    pub fn add_player(&mut self, id: u32, name: String) -> Result<bool, &'static str> {
-        let unit = match spwan_random_unit_in_grid(&mut self.gamegrid, id) {
+    pub fn add_player(&mut self, id: u32, name: String) -> Result<(), &'static str> {
+        let grid_unit = match spwan_random_unit_in_grid(&mut self.gamegrid, id) {
             Ok(unit) => unit,
             Err(msg) => return Err(msg),
         };
+        let health = Health::new(DEFAULT_UNIT_HEALTH);
+        let weapon = Weapon::new(DEFAULT_UNIT_STRENGTH);
+        let unit = Unit::new(
+            id,
+            name.clone(),
+            grid_unit,
+            health,
+            weapon,
+            DEFAULT_UNIT_VISION_RANGE,
+        );
         let player = Player::new(id, name, unit);
 
         match self.players.entry(id) {
@@ -34,11 +43,13 @@ impl<'a> Game<'a> {
             }
             std::collections::hash_map::Entry::Vacant(entry) => {
                 entry.insert(player);
-                return Ok(true);
+                return Ok(());
             }
         }
     }
 
+    /*
+    // TODO TMP to remove when this is fully re-integrated
     pub fn request_turn_action(&mut self) {
         self.players.values_mut().for_each(|p: &mut Player| {
             p.request_turn_action(self.current_turn);
@@ -66,4 +77,5 @@ impl<'a> Game<'a> {
 
         self.current_turn += 1;
     }
+    */
 }
