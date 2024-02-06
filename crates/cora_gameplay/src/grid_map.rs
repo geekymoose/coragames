@@ -39,7 +39,7 @@ impl Grid {
         &self,
         x: usize,
         y: usize,
-        direction: Direction,
+        direction: &Direction,
     ) -> Option<&GridCell> {
         if !self.is_valid_coordinates(x, y) {
             return None;
@@ -57,7 +57,7 @@ impl Grid {
         &mut self,
         x: usize,
         y: usize,
-        direction: Direction,
+        direction: &Direction,
     ) -> Option<&mut GridCell> {
         if !self.is_valid_coordinates(x, y) {
             return None;
@@ -114,58 +114,4 @@ impl Grid {
     fn is_valid_coordinates(&self, x: usize, y: usize) -> bool {
         return is_valid_in_grid(&self.config, x, y);
     }
-
-    /*
-    // TODO WIP confirm when this can be removed (when movement.rs is updated)
-
-    fn is_cell_free(&self, cell: &Cell) -> bool {
-        return match cell.unit {
-            Some(_) => false,
-            None => true,
-        };
-    }
-
-    fn is_cell_free_at_coord(&self, x: usize, y: usize) -> bool {
-        let cell = match self.get_cell_at_pos(x, y) {
-            Some(value) => value,
-            None => return false,
-        };
-        return self.is_cell_free(cell);
-    }
-
-    fn place_unit_at_cell(&mut self, unit: GridUnit, cell: &mut Cell) -> Result<(), Unit> {
-        match cell.unit {
-            Some(_) => return Err(unit),
-            None => {
-                unit.movement(cell.x(), cell.y());
-                cell.unit = Some(unit)
-            }
-        }
-        return Ok(());
-    }
-
-    fn place_unit_at_coord(&mut self, mut unit: Unit, x: usize, y: usize) -> Result<(), Unit> {
-        match self.get_mut_cell_at_pos(x, y) {
-            Some(cell) => {
-                cell.unit = Some(unit);
-                return Ok(());
-            }
-            None => return Err(unit),
-        };
-    }
-
-    fn remove_unit_from_cell(&mut self, cell: &mut Cell) -> Result<Option<Unit>, &'static str> {
-        match &cell.unit {
-            Some(unit) => return Ok(cell.unit.take()),
-            None => return Ok(None),
-        }
-    }
-
-    fn remove_unit_from_coord(&mut self, x: usize, y: usize) -> Result<Option<Unit>, &'static str> {
-        return match self.get_mut_cell_at_pos(x, y) {
-            Some(value) => Ok(value.unit.take()),
-            None => Err("Unable to remove, the coordinates are invalid"),
-        };
-    }
-    */
 }
