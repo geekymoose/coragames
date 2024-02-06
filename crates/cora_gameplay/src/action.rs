@@ -13,7 +13,7 @@ pub(crate) fn apply_action(
     grid: &mut Grid,
 ) -> Result<GridUnit, &'static str> {
     match action {
-        Action::Move(direction) => return movement::move_unit(unit, grid, &direction),
+        Action::Move(direction) => return movement::move_unit_on_grid(unit, grid, &direction),
         Action::Attack(_) => todo!("Not Implemented"),
         Action::Interact(_) => todo!("Not Implemented"),
     }
