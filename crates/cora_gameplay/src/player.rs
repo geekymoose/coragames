@@ -1,11 +1,9 @@
-use crate::action::Action;
-use crate::grid_unit::GridUnit;
-use crate::vision::GridVision;
+use crate::unit::Unit;
 
 /// A Player is an entity which controls one unit and decides its actions at each turn.
 /// You can view it as the physical player in a boardgame for instance.
 #[derive(Debug)]
-pub struct Player<'a> {
+pub struct Player {
     /// The unique player ID to uniquely designate this player.
     id: u32,
 
@@ -14,50 +12,12 @@ pub struct Player<'a> {
 
     /// The unit currently controlled by the player.
     /// One unit should be controlled by exactly one player.
-    unit: GridUnit,
-
-    /// Each turn, the player has to compute an action.
-    /// This is the current request ongoing and it's possible response when computed.
-    /// If None, it means the player is currently not computing anything (e.g., start of the turn).
-    turn_action: PlayerTurnStatus<'a>,
+    unit: Unit,
 }
 
-#[derive(Debug)]
-pub enum PlayerTurnStatus<'a> {
-    /// The player is not doing anything.
-    /// Usually, this is at the beginning of the turn.
-    Idle,
-
-    /// The player is computing an action.
-    /// This holds the data used for the request.
-    Computing(PlayerTurnRequest<'a>),
-
-    /// The player responded with an action to do.
-    /// This holds the response data (the action).
-    Responded(PlayerTurnResponse),
-}
-
-#[derive(Debug)]
-pub struct PlayerTurnRequest<'a> {
-    turn_start: u32,
-    vision: &'a GridVision,
-}
-
-#[derive(Debug)]
-pub struct PlayerTurnResponse {
-    turn_start: u32,
-    turn_end: u32,
-    action: Action,
-}
-
-impl<'a> Player<'a> {
-    pub(crate) fn new(id: u32, name: String, unit: GridUnit) -> Self {
-        Self {
-            id,
-            name,
-            unit,
-            turn_action: PlayerTurnStatus::Idle,
-        }
+impl Player {
+    pub(crate) fn new(id: u32, name: String, unit: Unit) -> Self {
+        Self { id, name, unit }
     }
 
     pub fn id(&self) -> &u32 {
@@ -68,54 +28,7 @@ impl<'a> Player<'a> {
         &self.name
     }
 
-    pub fn status(&self) -> &PlayerTurnStatus {
-        &self.turn_action
-    }
-
-    pub(crate) fn request_turn_action(&mut self, turn_counter: u32) -> Option<&PlayerTurnRequest> {
-        match &self.turn_action {
-            PlayerTurnStatus::Idle => {
-                //self.unit.update_vision();
-                /*
-                let turn_request = PlayerTurnRequest {
-                    turn_start: turn_counter,
-                    vision: todo!("WIP Not Implemented"),
-                };
-                self.turn_action = PlayerTurnStatus::Computing(turn_request);
-                */
-                todo!("WIP Not Implemented"); // TODO Fixme (return the TurnInfo)
-            }
-            PlayerTurnStatus::Computing(_) => {
-                // Already doing someting.
-                return None;
-            }
-            PlayerTurnStatus::Responded(_) => {
-                // Already doing someting.
-                return None;
-            }
-        }
-    }
-
-    pub(crate) fn register_turn_action(
-        &mut self,
-        turn_counter: u32,
-        response: Action,
-    ) -> Result<bool, &'static str> {
-        todo!("Not Implemented"); // TODO Fixme
-    }
-
-    pub(crate) fn apply_turn_action(&mut self) {
-        match &self.turn_action {
-            PlayerTurnStatus::Idle => {
-                // Nothing to do (this method may have been called to early)
-            }
-            PlayerTurnStatus::Computing(_) => {
-                // The player did not responded yet. Too bad.
-            }
-            PlayerTurnStatus::Responded(res) => {
-                todo!("WIP Not Implemented");
-                //action::apply_action(res.action, unit, terrain);
-            }
-        }
+    pub fn unit(&self) -> &Unit {
+        return &self.unit;
     }
 }

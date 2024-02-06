@@ -21,6 +21,7 @@ fn main() {
         println!("Playing one turn...");
         println!("--- DEBUG (dumping game data): ---\n{:?}", game);
 
+        /*
         game.request_turn_action();
 
         game.register_player_response(1, Action::Move(Direction::Up));
@@ -28,6 +29,7 @@ fn main() {
 
         thread::sleep(Duration::from_secs(TURN_DURECTION_SEC));
         game.apply_turn();
+         */
     }
 
     //println!("--- Cora GameServer stops ---");
