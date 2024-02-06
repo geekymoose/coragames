@@ -1,6 +1,6 @@
 use crate::{direction::Direction, grid_map::Grid, grid_unit::GridUnit};
 
-pub(crate) fn move_unit(
+pub(crate) fn move_unit_on_grid(
     unit: GridUnit,
     grid: &mut Grid,
     direction: &Direction,

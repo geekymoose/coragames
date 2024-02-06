@@ -1,4 +1,5 @@
 pub mod action;
+mod combat;
 pub mod config;
 pub mod direction;
 pub mod game;
