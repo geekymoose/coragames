@@ -1,26 +1,24 @@
-use std::{collections::HashMap, rc::Rc};
+use std::collections::HashMap;
 
-use crate::{action::Action, vision::GridVision};
+use crate::{
+    action::{apply_action, Action},
+    grid_map::Grid,
+    unit::Unit,
+    vision::GridVision,
+};
 
 #[derive(Debug)]
 pub struct Turn {
     turn_counter: u32,
     turn_duration_in_ms: u32,
-    turn_requests: HashMap<u32, TurnActionRequestStatus>,
-}
-
-#[derive(Debug)]
-pub enum TurnActionRequestStatus {
-    Idle,
-    Computing(TurnActionRequest),
-    Responded(TurnActionResponse),
+    turn_requests: HashMap<u32, TurnActionRequest>,
+    turn_response: Vec<TurnActionResponse>,
 }
 
 #[derive(Debug)]
 pub struct TurnActionRequest {
     unit_id: u32,
     turn_start: u32,
-    vision: Rc<GridVision>,
 }
 
 #[derive(Debug)]
@@ -37,22 +35,44 @@ impl Turn {
             turn_counter: 0,
             turn_duration_in_ms,
             turn_requests: HashMap::new(),
+            turn_response: Vec::new(),
         }
     }
 
-    pub fn request_all_turn_actions(&self) -> Vec<TurnActionRequest> {
-        let mut result: Vec<TurnActionRequest> = Vec::with_capacity(self.turn_requests.len());
+    pub fn request_all_turn_actions(
+        &mut self,
+        units: &HashMap<u32, Unit>,
+        grid: &Grid,
+    ) -> HashMap<u32, GridVision> {
+        let mut result: HashMap<u32, GridVision> = HashMap::with_capacity(units.len());
 
-        for unit_requests_status in self.turn_requests.iter() {
-            match unit_requests_status.1 {
-                TurnActionRequestStatus::Idle => {
-                    // TODO Add vision
-                    // TODO let request = todo!("WIP");
-                    // TODO result.push(request)
-                }
-                TurnActionRequestStatus::Computing(_) => continue,
-                TurnActionRequestStatus::Responded(_) => continue,
+        for unit_bucket in units {
+            let unit_id = unit_bucket.0;
+            let unit = unit_bucket.1;
+
+            if self.turn_requests.contains_key(unit_id) {
+                // This unit is already processing a request
+                continue;
             }
+
+            let request = TurnActionRequest {
+                unit_id: *unit_id,
+                turn_start: self.turn_counter,
+            };
+
+            self.turn_requests.insert(*unit_id, request);
+
+            /*
+            let vision = GridVision::new_vision_of(
+                grid,
+                unit.grid_unit().x(),
+                unit.grid_unit().y(),
+                unit.vision_range(),
+            );
+            */
+            let vision = GridVision::new(unit.vision_range()); // TODO TMP
+
+            result.insert(*unit_id, vision);
         }
 
         return result;
@@ -63,20 +83,30 @@ impl Turn {
         unit_id: u32,
         action: Action,
     ) -> Result<(), &'static str> {
-        todo!("WIP Not Implemented");
+        let request = match self.turn_requests.remove(&unit_id) {
+            Some(unit) => unit,
+            None => return Err(
+                "Unable to register the action: no TurnActionRequest were registered for this unit",
+            ),
+        };
+
+        let response = TurnActionResponse {
+            unit_id,
+            turn_start: request.turn_start,
+            turn_end: self.turn_counter,
+            action,
+        };
+
+        self.turn_response.push(response);
+        return Ok(());
     }
 
     pub fn apply_all_turn_actions(&mut self) {
-        for unit_requests_status in self.turn_requests.iter() {
-            match unit_requests_status.1 {
-                TurnActionRequestStatus::Idle => continue,
-                TurnActionRequestStatus::Computing(_) => continue,
-                TurnActionRequestStatus::Responded(response) => {
-                    //self.turn_requests[unit_requests_status.0] = TurnActionRequestStatus::Idle;
-                    todo!("WIP Not Implemented");
-                }
-            }
+        for _request in &self.turn_response {
+            // TOOD Not implemented
+            //apply_action(request.action, request.unit_id, grid)
         }
+        self.turn_response.clear();
     }
 
     pub fn next_turn(&mut self) {
@@ -85,11 +115,5 @@ impl Turn {
 
     pub fn turn_duration_in_ms(&self) -> u32 {
         return self.turn_duration_in_ms;
-    }
-}
-
-impl TurnActionRequest {
-    pub fn unit_id(&self) -> u32 {
-        return self.unit_id;
     }
 }

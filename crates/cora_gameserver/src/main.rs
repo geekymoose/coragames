@@ -22,7 +22,7 @@ fn main() {
         let requests = game.request_turn_action();
 
         for req in requests {
-            let id = req.unit_id();
+            let id = req.0;
             let action = Action::Move(Direction::Up);
 
             match game.register_turn_action_response(id, action) {

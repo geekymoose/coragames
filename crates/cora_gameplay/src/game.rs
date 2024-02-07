@@ -3,8 +3,9 @@ use crate::combat::{Health, Weapon};
 use crate::config::*;
 use crate::grid_map::Grid;
 use crate::spawn::spwan_random_unit_in_grid;
-use crate::turn::{Turn, TurnActionRequest};
+use crate::turn::Turn;
 use crate::unit::Unit;
+use crate::vision::GridVision;
 use std::collections::HashMap;
 
 #[derive(Debug)]
@@ -77,8 +78,10 @@ impl Game {
         return self.units.contains_key(&id);
     }
 
-    pub fn request_turn_action(&self) -> Vec<TurnActionRequest> {
-        return self.turn.request_all_turn_actions();
+    pub fn request_turn_action(&mut self) -> HashMap<u32, GridVision> {
+        return self
+            .turn
+            .request_all_turn_actions(&self.units, &self.gamegrid);
     }
 
     pub fn register_turn_action_response(
