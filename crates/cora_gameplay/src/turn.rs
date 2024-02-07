@@ -62,15 +62,12 @@ impl Turn {
 
             self.turn_requests.insert(*unit_id, request);
 
-            /*
             let vision = GridVision::new_vision_of(
                 grid,
                 unit.grid_unit().x(),
                 unit.grid_unit().y(),
                 unit.vision_range(),
             );
-            */
-            let vision = GridVision::new(unit.vision_range()); // TODO TMP
 
             result.insert(*unit_id, vision);
         }
@@ -115,5 +112,9 @@ impl Turn {
 
     pub fn turn_duration_in_ms(&self) -> u32 {
         return self.turn_duration_in_ms;
+    }
+
+    pub fn current_turn(&self) -> u32 {
+        return self.turn_counter;
     }
 }

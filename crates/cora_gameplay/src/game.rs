@@ -100,4 +100,8 @@ impl Game {
     pub fn turn_duraction_in_ms(&self) -> u32 {
         return self.turn.turn_duration_in_ms();
     }
+
+    pub fn current_turn(&self) -> u32 {
+        return self.turn.current_turn();
+    }
 }
