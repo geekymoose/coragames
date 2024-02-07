@@ -36,7 +36,7 @@ fn main() {
 }
 
 fn add_player(id: u32, name: String, game: &mut Game) {
-    match game.add_player(id, name) {
+    match game.add_unit(id, name) {
         Ok(_) => println!("Player successfully added: ID: {} ", id),
         Err(msg) => println!(
             "Unable to create player. ID: {}\nError message: {}",
