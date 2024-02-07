@@ -30,11 +30,6 @@ impl GridCell {
         return self.walkable;
     }
 
-    pub fn toggle_walkable(&mut self) -> bool {
-        self.walkable = !self.walkable;
-        return self.is_walkable();
-    }
-
     pub fn has_unit(&self) -> bool {
         return match self.unit {
             Some(_) => true,

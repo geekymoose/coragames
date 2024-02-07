@@ -8,7 +8,6 @@ mod grid_coordinate;
 mod grid_map;
 mod grid_unit;
 mod movement;
-mod player;
 mod spawn;
 mod turn;
 mod unit;
