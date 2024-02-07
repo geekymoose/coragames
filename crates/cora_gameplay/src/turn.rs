@@ -17,7 +17,6 @@ pub struct Turn {
 
 #[derive(Debug)]
 pub struct TurnActionRequest {
-    unit_id: u32,
     turn_start: u32,
 }
 
@@ -56,7 +55,6 @@ impl Turn {
             }
 
             let request = TurnActionRequest {
-                unit_id: *unit_id,
                 turn_start: self.turn_counter,
             };
 
@@ -98,11 +96,19 @@ impl Turn {
         return Ok(());
     }
 
-    pub fn apply_all_turn_actions(&mut self) {
-        for _request in &self.turn_response {
-            // TOOD Not implemented
-            //apply_action(request.action, request.unit_id, grid)
+    pub fn apply_all_turn_actions(&mut self, units: &HashMap<u32, Unit>, grid: &mut Grid) {
+        for request in &self.turn_response {
+            let unit = match units.get(&request.unit_id) {
+                Some(unit) => unit,
+                None => continue, // This unit maybe have been removed from the game since then
+            };
+
+            match apply_action(&request.action, *unit.grid_unit(), grid) {
+                Ok(_) => continue,
+                Err(msg) => println!("Error while applying the action: {}", msg),
+            };
         }
+
         self.turn_response.clear();
     }
 
