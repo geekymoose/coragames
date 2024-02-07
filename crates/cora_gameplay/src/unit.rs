@@ -35,4 +35,8 @@ impl Unit {
     pub fn grid_unit(&self) -> &GridUnit {
         return &self.grid_unit;
     }
+
+    pub fn vision_range(&self) -> usize {
+        return self.vision_range;
+    }
 }
