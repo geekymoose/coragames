@@ -2,8 +2,6 @@ use std::{thread, time::Duration};
 
 use cora_gameplay::{action::Action, direction::Direction, game::Game};
 
-const TURN_DURECTION_SEC: u64 = 1;
-
 fn main() {
     println!("--- Cora GameServer starts ---");
 
@@ -19,17 +17,25 @@ fn main() {
 
     loop {
         println!("Playing one turn...");
-        println!("--- DEBUG (dumping game data): ---\n{:?}", game);
+        //println!("--- DEBUG (dumping game data): ---\n{:?}", game);
 
-        /*
-        game.request_turn_action();
+        let requests = game.request_turn_action();
 
-        game.register_player_response(1, Action::Move(Direction::Up));
-        game.register_player_response(2, Action::Move(Direction::Up));
+        for req in requests {
+            let id = req.unit_id();
+            let action = Action::Move(Direction::Up);
 
-        thread::sleep(Duration::from_secs(TURN_DURECTION_SEC));
+            match game.register_turn_action_response(id, action) {
+                Ok(_) => println!("Successfully registered a response for unit ID: {}", id),
+                Err(msg) => println!(
+                    "Error: failed to register the response for unit ID: {} with error: {}",
+                    id, msg
+                ),
+            }
+        }
+
+        thread::sleep(Duration::from_millis(game.turn_duraction_in_ms() as u64));
         game.apply_turn();
-         */
     }
 
     //println!("--- Cora GameServer stops ---");

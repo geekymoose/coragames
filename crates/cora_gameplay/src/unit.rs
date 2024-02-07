@@ -31,4 +31,8 @@ impl Unit {
             vision_range: vision,
         }
     }
+
+    pub fn grid_unit(&self) -> &GridUnit {
+        return &self.grid_unit;
+    }
 }
