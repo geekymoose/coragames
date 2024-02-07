@@ -1,12 +1,15 @@
+use crate::action::Action;
 use crate::combat::{Health, Weapon};
 use crate::config::*;
 use crate::grid_map::Grid;
 use crate::spawn::spwan_random_unit_in_grid;
+use crate::turn::{Turn, TurnActionRequest};
 use crate::unit::Unit;
 use std::collections::HashMap;
 
 #[derive(Debug)]
 pub struct Game {
+    turn: Turn,
     gamegrid: Grid,
     units: HashMap<u32, Unit>,
 }
@@ -14,6 +17,7 @@ pub struct Game {
 impl Game {
     pub fn new(config: GridConfig) -> Self {
         Self {
+            turn: Turn::new(DEFAULT_TURN_DURACTION_IN_MS),
             gamegrid: Grid::new(config),
             units: HashMap::new(),
         }
@@ -37,7 +41,7 @@ impl Game {
 
         match self.units.entry(id) {
             std::collections::hash_map::Entry::Occupied(_) => {
-                return Err("Unable to add player: the ID already exists");
+                return Err("Unable to add unit: the ID already exists");
             }
             std::collections::hash_map::Entry::Vacant(entry) => {
                 entry.insert(unit);
@@ -46,34 +50,51 @@ impl Game {
         }
     }
 
-    /*
-    // TODO TMP to remove when this is fully re-integrated
-    pub fn request_turn_action(&mut self) {
-        self.players.values_mut().for_each(|p: &mut Player| {
-            p.request_turn_action(self.current_turn);
-        });
-    }
-
-    pub fn register_player_response(
-        &mut self,
-        player_id: u32,
-        action: Action,
-    ) -> Result<bool, &'static str> {
-        let player: &mut Player = match self.players.get_mut(&player_id) {
-            Some(p) => p,
-            None => return Err("The requested player doesn't exists in-game"),
+    pub fn remove_unit(&mut self, id: u32) -> Result<(), &'static str> {
+        let unit = match self.units.remove(&id) {
+            Some(unit) => unit,
+            None => return Err("The requested Unit doesn exist in the game"),
         };
 
-        return player.register_turn_action(self.current_turn, action);
+        let cell = match self
+            .gamegrid
+            .cell_at_pos_mut(unit.grid_unit().x(), unit.grid_unit().y())
+        {
+            Some(cell) => cell,
+            None => return Err("Unable to find the unit in the grid"),
+        };
+        match cell.remove_unit() {
+            Some(_) => return Ok(()),
+            None => return Err("Error while removing the Unit from the grid"),
+        }
+    }
+
+    pub fn units_count_in_game(&self) -> usize {
+        return self.units.len();
+    }
+
+    pub fn has_unit(&self, id: u32) -> bool {
+        return self.units.contains_key(&id);
+    }
+
+    pub fn request_turn_action(&self) -> Vec<TurnActionRequest> {
+        return self.turn.request_all_turn_actions();
+    }
+
+    pub fn register_turn_action_response(
+        &mut self,
+        unit_id: u32,
+        action: Action,
+    ) -> Result<(), &'static str> {
+        return self.turn.register_turn_action_response(unit_id, action);
     }
 
     pub fn apply_turn(&mut self) {
-        // TODO The order in witch action are concluded should use a better approach (e.g., received first applied first)
-        self.players.values_mut().for_each(|p: &mut Player| {
-            p.apply_turn_action();
-        });
-
-        self.current_turn += 1;
+        self.turn.apply_all_turn_actions();
+        self.turn.next_turn();
     }
-    */
+
+    pub fn turn_duraction_in_ms(&self) -> u32 {
+        return self.turn.turn_duration_in_ms();
+    }
 }
