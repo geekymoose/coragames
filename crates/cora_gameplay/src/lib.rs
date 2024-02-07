@@ -11,4 +11,4 @@ mod movement;
 mod spawn;
 mod turn;
 mod unit;
-mod vision;
+pub mod vision;

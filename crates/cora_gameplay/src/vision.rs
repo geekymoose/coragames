@@ -1,10 +1,11 @@
+use std::fmt::{self, write};
+
 use crate::grid_map::Grid;
 
-#[derive(Debug)]
 pub struct GridVision {
     vision_range: usize,
-    vision_width: usize,
-    vision_height: usize,
+    vision_grid_width: usize,
+    vision_grid_height: usize,
     vision_grid: Vec<GridVisionData>,
 }
 
@@ -23,8 +24,8 @@ impl GridVision {
 
         Self {
             vision_range,
-            vision_width: row_size,
-            vision_height: column_size,
+            vision_grid_width: row_size,
+            vision_grid_height: column_size,
             vision_grid: vision_grid,
         }
     }
@@ -37,6 +38,7 @@ impl GridVision {
     ) -> Self {
         let mut vision = GridVision::new(vision_range);
 
+        // TODO CRITIAL: Fix negative values
         let x_start = x_in_grid - vision.vision_range;
         let x_end = x_in_grid + vision_range;
         let y_start = y_in_grid - vision_range;
@@ -68,5 +70,40 @@ impl GridVision {
         }
 
         return vision;
+    }
+}
+
+impl fmt::Debug for GridVision {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("GridVision")
+            .field("vision_range", &self.vision_range)
+            .field("vision_grid_width", &self.vision_grid_width)
+            .field("vision_grid_height", &self.vision_grid_height)
+            .finish()?;
+
+        write!(f, "vision_grid:\n")?;
+        for y in 0..self.vision_grid_height {
+            for x in 0..self.vision_grid_width {
+                let pos = x + (y * self.vision_grid_width);
+
+                match self.vision_grid.get(pos) {
+                    Some(cell) => {
+                        if cell.unit {
+                            write!(f, "O ")?;
+                        } else if cell.movable {
+                            write!(f, ". ")?;
+                        } else {
+                            write!(f, "X ")?;
+                        }
+                    }
+                    None => {
+                        write!(f, "? ")?;
+                    }
+                }
+            }
+            write!(f, "\n")?;
+        }
+
+        return write!(f, "\n");
     }
 }
