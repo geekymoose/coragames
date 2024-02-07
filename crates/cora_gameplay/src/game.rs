@@ -93,7 +93,8 @@ impl Game {
     }
 
     pub fn apply_turn(&mut self) {
-        self.turn.apply_all_turn_actions();
+        self.turn
+            .apply_all_turn_actions(&self.units, &mut self.gamegrid);
         self.turn.next_turn();
     }
 

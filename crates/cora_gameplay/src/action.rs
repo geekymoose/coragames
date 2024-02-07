@@ -8,7 +8,7 @@ pub enum Action {
 }
 
 pub(crate) fn apply_action(
-    action: Action,
+    action: &Action,
     unit: GridUnit,
     grid: &mut Grid,
 ) -> Result<GridUnit, &'static str> {
