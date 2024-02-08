@@ -103,7 +103,7 @@ impl Turn {
                 None => continue, // This unit maybe have been removed from the game since then
             };
 
-            match apply_action(&request.action, *unit.grid_unit(), grid) {
+            match apply_action(&request.action, unit, grid) {
                 Ok(_) => continue,
                 Err(msg) => println!("Error while applying the action: {}", msg),
             };
