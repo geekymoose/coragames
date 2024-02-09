@@ -1,6 +1,6 @@
 use rand::Rng;
 
-use crate::{config::GridConfig, direction::Direction};
+use crate::{direction::Direction, grid_config::GridConfig};
 
 #[derive(Debug, Default, Clone, Copy)]
 pub struct GridCoordinate {
@@ -11,6 +11,14 @@ pub struct GridCoordinate {
 impl GridCoordinate {
     pub fn new(x: usize, y: usize) -> Self {
         return Self { x: x, y: y };
+    }
+
+    pub fn new_random(config: &GridConfig) -> Self {
+        let mut rng = rand::thread_rng();
+        return Self {
+            x: rng.gen_range(0..config.width()),
+            y: rng.gen_range(0..config.height()),
+        };
     }
 
     pub fn x(&self) -> usize {
@@ -26,56 +34,37 @@ impl GridCoordinate {
         self.y = y;
     }
 
-    pub fn is_in_grid(&self, config: &GridConfig) -> bool {
-        return is_valid_in_grid(config, self.x, self.y);
-    }
-}
-
-pub fn is_valid_in_grid(config: &GridConfig, x: usize, y: usize) -> bool {
-    let valid_x = x < config.width;
-    let valid_y = y < config.height;
-    return valid_x && valid_y;
-}
-
-pub fn neighbor_coordinates_at_direction(
-    config: &GridConfig,
-    x: usize,
-    y: usize,
-    direction: &Direction,
-) -> Option<GridCoordinate> {
-    if !is_valid_in_grid(config, x, y) {
-        return None;
+    pub fn is_valid_in_grid(&self, config: &GridConfig) -> bool {
+        let valid_x = self.x < config.width();
+        let valid_y = self.y < config.height();
+        return valid_x && valid_y;
     }
 
-    let mut dir_x = x;
-    let mut dir_y = y;
+    pub fn get_neighbor_coordinates_at_direction(
+        &self,
+        config: &GridConfig,
+        direction: &Direction,
+    ) -> Option<GridCoordinate> {
+        let mut neighbor = self.clone();
 
-    match direction {
-        Direction::Up => {
-            dir_y += 1;
+        match direction {
+            Direction::Up => {
+                neighbor.y += 1;
+            }
+            Direction::Down => {
+                neighbor.y -= 1;
+            }
+            Direction::Left => {
+                neighbor.x -= 1;
+            }
+            Direction::Right => {
+                neighbor.x += 1;
+            }
         }
-        Direction::Down => {
-            dir_y -= 1;
+
+        if !neighbor.is_valid_in_grid(config) {
+            return None;
         }
-        Direction::Left => {
-            dir_x -= 1;
-        }
-        Direction::Right => {
-            dir_x += 1;
-        }
+        return Some(neighbor);
     }
-
-    return Some(GridCoordinate { x: dir_x, y: dir_y });
-}
-
-pub fn random_coordinates(config: &GridConfig) -> GridCoordinate {
-    let mut rng = rand::thread_rng();
-
-    let rand_x = rng.gen_range(0..config.width);
-    let rand_y = rng.gen_range(0..config.height);
-
-    return GridCoordinate {
-        x: rand_x,
-        y: rand_y,
-    };
 }
