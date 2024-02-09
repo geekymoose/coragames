@@ -1,18 +1,18 @@
 use crate::{config::GridConfig, coordinate::GridCoordinate, direction::GridDirection};
 
 #[derive(Debug)]
-pub(crate) struct SquareGrid2D<T: Default> {
+pub(crate) struct Grid<T: Default> {
     config: GridConfig,
     cells: Vec<T>,
 }
 
-impl<T: Default> SquareGrid2D<T> {
+impl<T: Default> Grid<T> {
     pub fn new(config: GridConfig) -> Self {
         let mut cells = Vec::with_capacity(config.size());
         for _i in 0..config.size() {
             cells.push(T::default());
         }
-        return SquareGrid2D { config, cells };
+        return Grid { config, cells };
     }
 
     pub fn size(&self) -> usize {
