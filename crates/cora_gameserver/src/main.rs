@@ -1,15 +1,13 @@
 use std::{thread, time::Duration};
 
-use cora_gameplay::{action::Action, direction::Direction, game::Game, vision::GridVision};
+use cora_gameplay::{
+    action::Action, direction::Direction, game::Game, grid_config::GridConfig, vision::GridVision,
+};
 
 fn main() {
     println!("--- Cora GameServer starts ---");
 
-    let config: cora_gameplay::config::GridConfig = cora_gameplay::config::GridConfig {
-        width: 100,
-        height: 100,
-    };
-
+    let config: GridConfig = GridConfig::new(100, 100).unwrap();
     let mut game = Game::new(config);
 
     add_player(1, String::from("player1"), &mut game);

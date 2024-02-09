@@ -1,11 +1,14 @@
-use crate::{direction::Direction, grid_map::Grid, grid_unit::GridUnit};
+use crate::{
+    direction::Direction, grid_cell::GridCell, grid_map::SquareGrid2D, grid_unit::GridUnit,
+};
 
 pub(crate) fn move_unit_on_grid(
     unit: GridUnit,
-    grid: &mut Grid,
+    grid: &mut SquareGrid2D<GridCell>,
     direction: &Direction,
 ) -> Result<GridUnit, &'static str> {
-    let dest = match grid.neighbor_at_direction(unit.x(), unit.y(), direction) {
+    // TODO CRITICAL Update the unit position data (until then, the unit does not actually move)
+    let dest = match grid.get_neighbor_at_direction(&unit.grid_coordinates(), &direction) {
         Some(cell) => cell,
         None => return Err(
             "Unable to get the neighbor cell for this direction (you may have reach the border)",
@@ -14,12 +17,11 @@ pub(crate) fn move_unit_on_grid(
 
     if dest.has_unit() {
         return Err("Unable to move on a cell that already has a Unit on it");
-    }
-    if !dest.is_walkable() {
+    } else if !dest.is_walkable() {
         return Err("Unable to move on a cell that is not walkable");
     }
 
-    let src = match grid.cell_at_pos_mut(unit.x(), unit.y()) {
+    let src = match grid.get_mut(&unit.grid_coordinates()) {
         Some(cell) => cell,
         None => return Err("Unable to get the requested cell from the Grid"),
     };
@@ -31,7 +33,7 @@ pub(crate) fn move_unit_on_grid(
         }
     };
 
-    let dest = match grid.neighbor_at_direction_mut(unit.x(), unit.y(), direction) {
+    let dest = match grid.get_neighbor_at_direction_mut(&unit.grid_coordinates(), direction) {
         Some(cell) => cell,
         None => return Err(
             "Unable to get the neighbor cell for this direction (you may have reach the border)",

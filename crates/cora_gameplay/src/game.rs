@@ -1,7 +1,9 @@
 use crate::action::Action;
 use crate::combat::{Health, Weapon};
 use crate::config::*;
-use crate::grid_map::Grid;
+use crate::grid_cell::GridCell;
+use crate::grid_config::GridConfig;
+use crate::grid_map::SquareGrid2D;
 use crate::spawn::spwan_random_unit_in_grid;
 use crate::turn::Turn;
 use crate::unit::Unit;
@@ -11,7 +13,7 @@ use std::collections::HashMap;
 #[derive(Debug)]
 pub struct Game {
     turn: Turn,
-    gamegrid: Grid,
+    gamegrid: SquareGrid2D<GridCell>,
     units: HashMap<u32, Unit>,
 }
 
@@ -19,7 +21,7 @@ impl Game {
     pub fn new(config: GridConfig) -> Self {
         Self {
             turn: Turn::new(DEFAULT_TURN_DURACTION_IN_MS),
-            gamegrid: Grid::new(config),
+            gamegrid: SquareGrid2D::new(config),
             units: HashMap::new(),
         }
     }
@@ -57,10 +59,7 @@ impl Game {
             None => return Err("The requested Unit doesn exist in the game"),
         };
 
-        let cell = match self
-            .gamegrid
-            .cell_at_pos_mut(unit.grid_unit().x(), unit.grid_unit().y())
-        {
+        let cell = match self.gamegrid.get_mut(&unit.grid_unit().grid_coordinates()) {
             Some(cell) => cell,
             None => return Err("Unable to find the unit in the grid"),
         };

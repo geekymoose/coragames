@@ -2,7 +2,8 @@ use std::collections::HashMap;
 
 use crate::{
     action::{apply_action, Action},
-    grid_map::Grid,
+    grid_cell::GridCell,
+    grid_map::SquareGrid2D,
     unit::Unit,
     vision::GridVision,
 };
@@ -41,9 +42,9 @@ impl Turn {
     pub fn request_all_turn_actions(
         &mut self,
         units: &HashMap<u32, Unit>,
-        grid: &Grid,
+        grid: &SquareGrid2D<GridCell>,
     ) -> HashMap<u32, GridVision> {
-        let mut result: HashMap<u32, GridVision> = HashMap::with_capacity(units.len());
+        let mut result = HashMap::with_capacity(units.len());
 
         for unit_bucket in units {
             let unit_id = unit_bucket.0;
@@ -61,9 +62,8 @@ impl Turn {
             self.turn_requests.insert(*unit_id, request);
 
             let vision = GridVision::new_vision_of(
-                grid,
-                unit.grid_unit().x(),
-                unit.grid_unit().y(),
+                &grid,
+                &unit.grid_unit().grid_coordinates(),
                 unit.vision_range(),
             );
 
@@ -96,7 +96,11 @@ impl Turn {
         return Ok(());
     }
 
-    pub fn apply_all_turn_actions(&mut self, units: &HashMap<u32, Unit>, grid: &mut Grid) {
+    pub fn apply_all_turn_actions(
+        &mut self,
+        units: &HashMap<u32, Unit>,
+        grid: &mut SquareGrid2D<GridCell>,
+    ) {
         for request in &self.turn_response {
             let unit = match units.get(&request.unit_id) {
                 Some(unit) => unit,

@@ -1,6 +1,6 @@
 use std::fmt;
 
-use crate::grid_map::Grid;
+use crate::{grid_cell::GridCell, grid_coordinate::GridCoordinate, grid_map::SquareGrid2D};
 
 pub struct GridVision {
     vision_range: usize,
@@ -31,25 +31,25 @@ impl GridVision {
     }
 
     pub(crate) fn new_vision_of(
-        grid: &Grid,
-        x_in_grid: usize,
-        y_in_grid: usize,
+        grid: &SquareGrid2D<GridCell>,
+        position: &GridCoordinate,
         vision_range: usize,
     ) -> Self {
         let mut vision = GridVision::new(vision_range);
 
         // TODO CRITIAL: Fix negative values
-        let x_start = x_in_grid - vision.vision_range;
-        let x_end = x_in_grid + vision_range;
-        let y_start = y_in_grid - vision_range;
-        let y_end = y_in_grid + vision_range;
+        let x_start = position.x() - vision.vision_range;
+        let x_end = position.x() + vision_range;
+        let y_start = position.y() - vision_range;
+        let y_end = position.y() + vision_range;
 
         let x_range = x_start..(x_end + 1);
         let y_range = (y_start..(y_end + 1)).rev();
 
         for y in y_range {
             for x in x_range.clone() {
-                match grid.cell_at_pos(x, y) {
+                let xy = GridCoordinate::new(x, y);
+                match grid.get(&xy) {
                     Some(cell) => {
                         let elt = GridVisionData {
                             movable: cell.is_walkable(),
